@@ -1,64 +1,3089 @@
+
 <!DOCTYPE html>
 <html lang="sq">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Doktor Lumen</title>
-<style>
-body {font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f7f9fb;}
-header {background-color: #2978b5; color: white; padding: 40px 20px; text-align: center;}
-section {padding: 30px 20px; max-width: 900px; margin: 0 auto;}
-.card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    background-color: #fff;
-    margin-bottom: 25px;
-}
-.card h3 {margin-top: 0;}
-.agenda ul {list-style: none; padding: 0; margin: 0;}
-.agenda li {
-    margin-bottom: 10px;
-    padding: 8px;
-    background-color: #fff;
-    border-left: 4px solid #2978b5;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-#sektori {
-    background-color: #eaf2f8;
-    border-radius: 8px;
-}
-footer {background-color: #2978b5; color: white; text-align: center; padding: 15px 10px; margin-top: 30px;}
-</style>
+  <meta charset="UTF-8">
+  <title>Doctor Lumen - Platformë Mjekësore</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <!-- Meta përshkrimi për përmirësim SEO dhe shpërndarje -->
+  <meta name="description" content="Doktor Lumen është një platformë mjekësore inovative për menaxhimin e pacientëve, lëshimin e recetave, kartelat mjekësore dhe analizimin e simptomave.">
+  <!-- Parangarkim i lidhjeve të fontit për performancë më të mirë -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: radial-gradient(ellipse at 45% 10%, #29406b 0%, #17212e 100%);
+      min-height: 100vh;
+      color: #e8fdff;
+      overflow-x: hidden;
+      position: relative;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .particles-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: transparent;
+    }
+    .hud-dashboard {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 70px;
+      background: rgba(19, 30, 48, 0.7);
+      backdrop-filter: blur(25px) saturate(140%);
+      box-shadow: 0 4px 20px rgba(22, 255, 243, 0.2), 0 2px 8px rgba(22, 255, 243, 0.3);
+      border-bottom: 1px solid rgba(22, 255, 243, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      gap: 15px;
+      animation: appearTop 1s cubic-bezier(0.77, 0, 0.18, 1);
+    }
+    @keyframes appearTop { from { transform: translateY(-40px); opacity: 0; } to { transform: none; opacity: 1; } }
+    .hud-logo {
+      color: #16fff3;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-shadow: 0 0 15px rgba(22, 255, 243, 0.8);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Orbitron', Arial, sans-serif;
+    }
+    .hud-menu {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      white-space: nowrap;
+      flex: 1 1 auto;
+      align-items: center;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 5px;
+    }
+    .hud-menu::-webkit-scrollbar { display: none; }
+    .hud-link {
+      color: #92e7ff;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 10px 15px;
+      border-radius: 9px;
+      background: transparent;
+      transition: all 0.2s;
+      min-width: 60px;
+      text-align: center;
+      outline: none;
+      border: none;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .hud-link.active, .hud-link:focus, .hud-link:hover {
+      background: rgba(22, 255, 243, 0.18);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(22, 255, 243, 0.4);
+      border-bottom: 2px solid #16fff3;
+    }
+    .hud-status {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .hud-clock {
+      color: #16fff3;
+      font-size: 1.1rem;
+      font-family: 'Orbitron', Arial, sans-serif;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-shadow: 0 0 10px rgba(22, 255, 243, 0.6);
+      margin-right: 5px;
+    }
+    .hud-user {
+      color: #d8ffeb;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(27, 40, 49, 0.4);
+      border-radius: 9px;
+      padding: 7px 10px;
+      box-shadow: 0 0 10px rgba(22, 255, 243, 0.2);
+      border: 1px solid rgba(22, 255, 243, 0.4);
+    }
+    .content-3d {
+      position: relative;
+      z-index: 2;
+      padding: 90px 20px 20px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      transition: all 0.2s;
+    }
+    .panel-glass {
+      background: rgba(18, 32, 54, 0.7);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(22, 255, 243, 0.2), 0 5px 15px rgba(22, 255, 243, 0.3);
+      border: 1px solid rgba(22, 255, 243, 0.4);
+      min-width: 0;
+      max-width: 1200px;
+      flex: 1 1 400px;
+      padding: 25px 20px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(15px) saturate(130%);
+      position: relative;
+      animation: panelIn 1.1s cubic-bezier(0.85, 0, 0.15, 1) both;
+      transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+      overflow-x: auto;
+    }
+    @keyframes panelIn { from { opacity: 0; transform: translateY(80px) scale(0.95); } to { opacity: 1; transform: none; } }
+    .panel-glass:hover {
+      box-shadow: 0 18px 50px rgba(22, 255, 243, 0.3), 0 8px 25px rgba(22, 255, 243, 0.2);
+      background: rgba(22, 50, 70, 0.8);
+      transform: translateY(-8px) scale(1.02);
+    }
+    .panel-title {
+      color: #16fff3;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      letter-spacing: 1.2px;
+      text-shadow: 0 0 12px rgba(22, 255, 243, 0.8);
+      font-family: 'Orbitron', Arial, sans-serif;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .btn {
+      display: inline-block;
+      background: linear-gradient(90deg, #16fff3 10%, #25f0e7 90%);
+      color: #032524;
+      border: none;
+      border-radius: 9px;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 10px 20px;
+      margin-top: 10px;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(22, 255, 243, 0.3);
+      transition: background 0.2s, color 0.2s, transform 0.1s;
+      letter-spacing: 0.8px;
+    }
+    .btn:hover { background: #0bffe4; color: #192838; transform: translateY(-2px); }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 9px;
+      border: 1px solid rgba(19, 191, 255, 0.6);
+      background: #101e29;
+      color: #d3feff;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      margin-top: 5px;
+      outline: none;
+      box-sizing: border-box;
+      min-width: 0;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus, textarea:focus, select:focus {
+        border-color: #16fff3;
+        box-shadow: 0 0 8px rgba(22, 255, 243, 0.5);
+    }
+    label { font-size: 0.95rem; color: #16fff3; font-weight: 500;}
+    table {
+      width: 100%; border-collapse: collapse; margin-top: 15px;
+      font-size: 0.95rem;
+      min-width: 600px;
+    }
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid rgba(18, 255, 243, 0.25);
+      text-align: left;
+      background: transparent;
+    }
+    th { background: rgba(22, 255, 243, 0.1); color: #16fff3; font-weight: 600;}
+    @media (max-width: 900px) {
+      .hud-dashboard { 
+        flex-direction: row; 
+        height: auto; 
+        gap: 8px; 
+        padding: 10px 2vw; 
+        flex-wrap: wrap;
+      }
+      .content-3d { flex-direction: column; gap: 15px; padding: 120px 2vw 20px 2vw; }
+      .panel-glass { max-width: 100vw; padding: 15px 3vw; }
+      .hud-menu { 
+        order: 3; 
+        width: 100%; 
+        margin-top: 5px;
+        padding-bottom: 10px;
+      }
+      .hud-status { margin-left: auto; }
+      table { min-width: 400px; font-size: 0.9rem; }
+      .btn { padding: 12px 15px; font-size: 0.95rem; }
+    }
+    @media (max-width: 600px) {
+      html, body { font-size: 15px; }
+      .hud-dashboard { padding: 8px 1vw; }
+      .panel-glass { min-width: 0; padding: 10px 2vw; }
+      .hud-link { font-size: 0.9rem; padding: 8px 8px; }
+      .content-3d { padding-top: 130px; }
+      table { min-width: 280px; font-size: 0.85rem; }
+      .panel-glass table { font-size: 0.85rem; }
+      .btn { padding: 10px 12px; font-size: 0.9rem; }
+    }
+    @media (max-width: 430px) {
+      .hud-logo { font-size: 1rem; }
+      .hud-clock { font-size: 1rem; }
+      .panel-title { font-size: 1rem; }
+      .hud-user { font-size: 0.9rem; gap: 4px; padding: 5px 7px; }
+      .hud-menu { gap: 5px; }
+      .hud-link { padding: 6px 4px; }
+      .btn { padding: 8px 10px; font-size: 0.85rem; }
+    }
+    .panel-glass table {
+      display: block;
+      width: 100%;
+      overflow-x: auto;
+    }
+    .panel-glass table tr, .panel-glass table td, .panel-glass table th {
+      min-width: 100px;
+      box-sizing: border-box;
+      white-space: nowrap;
+    }
+    #modal-login {
+      display: none; position: fixed; z-index: 999;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: rgba(10, 23, 32, 0.7);
+      align-items: center; justify-content: center;
+    }
+    #modal-login .panel-glass {
+      max-width: 380px;
+      box-shadow: 0 0 35px rgba(22, 255, 243, 0.7);
+      margin: 0 auto;
+      padding: 30px 25px;
+    }
+    #modal-login input { margin-bottom: 15px; }
+    .autocomplete-list {
+      position: absolute; background:#101e29; border:1px solid #16fff3;
+      z-index: 100; max-height: 150px; overflow-y: auto;
+      width: calc(100% - 2px); border-top:none; border-radius:0 0 9px 9px;
+    }
+    .autocomplete-list-item {
+      padding: 8px 12px; cursor:pointer; font-size:0.95rem;
+      color:#d3feff; border-bottom:1px solid rgba(22,255,243,0.2);
+    }
+    .autocomplete-list-item:hover { background:#16fff3; color:#0c151f; }
+    .mobile-btn-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .mobile-btn-group .btn {
+      flex: 1;
+      min-width: 0;
+      padding: 8px 10px;
+    }
+    .form-grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .form-grid-3col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 600px) {
+      .form-grid-2col, .form-grid-3col {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
+    /* Stilizime të reja për Symptom Checker */
+    .symptom-checker-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .symptom-selection {
+      background: rgba(20,33,54,0.7);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(22,255,243,0.3);
+    }
+    .symptom-results {
+      background: rgba(20,33,54,0.7);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(22,255,243,0.3);
+    }
+    .symptom-category {
+      margin-bottom: 15px;
+    }
+    .symptom-category-title {
+      color: #16fff3;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .symptom-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .symptom-item input {
+      width: auto;
+      margin-right: 8px;
+    }
+    .symptom-item label {
+      color: #cafdff;
+      cursor: pointer;
+      font-weight: 400;
+    }
+    .symptom-severity {
+      display: flex;
+      align-items: center;
+      margin-left: 10px;
+    }
+    .symptom-severity select {
+      width: auto;
+      margin-left: 5px;
+      padding: 5px;
+      font-size: 0.8rem;
+    }
+    .possible-condition {
+      background: rgba(22, 255, 243, 0.1);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    .condition-title {
+      color: #16fff3;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .condition-probability {
+      display: inline-block;
+      background: rgba(22, 255, 243, 0.2);
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      margin-left: 10px;
+    }
+    .condition-description {
+      font-size: 0.9rem;
+      color: #92e7ff;
+      margin-bottom: 10px;
+    }
+    .condition-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .condition-actions .btn {
+      margin-top: 0;
+    }
+    .symptom-search {
+      margin-bottom: 15px;
+    }
+    .symptom-search input {
+      width: 100%;
+    }
+    .symptom-duration {
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+    }
+    .symptom-duration input {
+      width: 60px;
+      margin: 0 5px;
+    }
+    .health-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .metric-card {
+      background: rgba(20,33,54,0.7);
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 0 8px rgba(22,255,243,0.2);
+    }
+    .metric-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #16fff3;
+      margin: 5px 0;
+    }
+    .metric-label {
+      font-size: 0.8rem;
+      color: #92e7ff;
+    }
+    .metric-trend {
+      font-size: 0.8rem;
+      margin-top: 5px;
+    }
+    .trend-up {
+      color: #ff5555;
+    }
+    .trend-down {
+      color: #aaff00;
+    }
+    .trend-neutral {
+      color: #92e7ff;
+    }
+  </style>
 </head>
 <body>
-<header>
-<h1>Dr. Lumen</h1>
-<p>Mjek specialist</p>
-</header>
-<section id="kartela">
-<h2>Kartela</h2>
-<div class="card">
-<h3>Historia Mjekësore</h3>
-<p>Kjo seksion përshkruan kartelën e pacientëve, diagnozat dhe trajtimet e fundit. Mund ta zgjeroni me informacione të personalizuara sipas nevojave tuaja.</p>
+  <!-- Element dekorativ: fshehet nga lexuesit e ekranit -->
+  <canvas class="particles-bg" id="particles-bg" aria-hidden="true"></canvas>
+  <div class="hud-dashboard">
+    <div class="hud-logo"><i class="fas fa-atom"></i> Doktor Lumen</div>
+    <nav class="hud-menu" role="navigation" aria-label="Menu" tabindex="0" id="hudMenu"></nav>
+    <div class="hud-status">
+      <span class="hud-clock" id="hudClock">--:--:--</span>
+      <span class="hud-user"><i class="fas fa-user-nurse"></i> Dr. Erio</span>
+    </div>
+  </div>
+  <div class="content-3d" id="main-section"></div>
+  <div id="modal-login">
+    <div class="panel-glass">
+      <div style="font-size:1.3rem;color:#16fff3;font-weight:700;margin-bottom:15px;font-family:'Orbitron',sans-serif;"><i class="fas fa-lock"></i> Hyr si mjek</div>
+      <input id="log_user" placeholder="Emri i përdoruesit" autocomplete="username" autofocus>
+      <input id="log_pass" type="password" placeholder="Fjalëkalimi" autocomplete="current-password">
+      <button class="btn" onclick="doLogin()" style="width:100%;">Hyr</button>
+      <button class="btn" onclick="closeModal()" style="width:100%; background:#2a3b50; color:#16fff3; border:1px solid #16fff3; margin-top:10px;">Anulo</button>
+      <div id="loginError" style="color:#ff5555;margin-top:15px;min-height:24px; text-align:center;"></div>
+    </div>
+  </div>
+
+<script>
+  // Lista e menuve
+  const PUBLIC_MENU = [
+    { id: "shtepia", icon: "home", label: "Shtepia" },
+    { id: "medikamente", icon: "pills", label: "Medikamente" },
+    { id: "kalkulatore", icon: "calculator", label: "Kalkulatore" },
+    { id: "artikuj", icon: "newspaper", label: "Artikuj" },
+    { id: "symptom-checker", icon: "stethoscope", label: "Symptom Checker" },
+    { id: "hyr", icon: "sign-in-alt", label: "Hyr" }
+  ];
+  
+  const MJEK_MENU = [
+    { id: "lumenrx", icon: "prescription", label: "Lumen Rx" },
+    { id: "kartela", icon: "notes-medical", label: "Kartela" },
+    { id: "axhenda", icon: "calendar-alt", label: "Axhenda" },
+    { id: "pacientet", icon: "users", label: "Pacientët" },
+    { id: "dashboard", icon: "chart-line", label: "Dashboard" },
+    { id: "logout", icon: "sign-out-alt", label: "Dil" }
+  ];
+
+  // Variabla globale
+  const mainSection = document.getElementById('main-section');
+  let symptomCheckerPanel = ''; // Do të inicializohet më vonë
+  
+  // Paneli i ri për Dashboard
+  const dashboardPanel = `
+    <div class="panel-glass" style="max-width:1200px;">
+      <div class="panel-title"><i class="fas fa-chart-line"></i> Dashboard Mjekësor</div>
+      
+      <div class="health-metrics">
+        <div class="metric-card">
+          <div class="metric-label">Pacientët Sot</div>
+          <div class="metric-value">12</div>
+          <div class="metric-trend trend-up"><i class="fas fa-arrow-up"></i> 20%</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Takimet e Sotme</div>
+          <div class="metric-value">8</div>
+          <div class="metric-trend trend-neutral"><i class="fas fa-equals"></i> 0%</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Receta të Lëshuara</div>
+          <div class="metric-value">15</div>
+          <div class="metric-trend trend-up"><i class="fas fa-arrow-up"></i> 5%</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Pacientë të Rinj</div>
+          <div class="metric-value">3</div>
+          <div class="metric-trend trend-down"><i class="fas fa-arrow-down"></i> 10%</div>
+        </div>
+      </div>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px;">
+        <div style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+          <div class="panel-title" style="font-size:1rem;"><i class="fas fa-calendar-check"></i> Takimet e Sotme</div>
+          <div id="todayAppointments" style="margin-top:15px;"></div>
+        </div>
+        
+        <div style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+          <div class="panel-title" style="font-size:1rem;"><i class="fas fa-user-clock"></i> Pacientët e Fundit</div>
+          <div id="recentPatients" style="margin-top:15px;"></div>
+        </div>
+      </div>
+      
+      <div style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);margin-top:20px;">
+        <div class="panel-title" style="font-size:1rem;"><i class="fas fa-chart-pie"></i> Statistikat e Diagnozave</div>
+        <canvas id="diagnosisChart" height="200" style="margin-top:15px;"></canvas>
+      </div>
+    </div>
+  `;
+
+  // Paneli i përmirësuar për Symptom Checker
+  symptomCheckerPanel = `
+    <div class="panel-glass" style="max-width:1000px;">
+      <div class="panel-title"><i class="fas fa-stethoscope"></i> Symptom Checker</div>
+      
+      <div class="symptom-checker-container">
+        <div class="symptom-selection">
+          <div class="symptom-search">
+            <input type="text" id="symptomSearch" placeholder="Kërko simptoma...">
+          </div>
+          
+          <div class="symptom-category">
+            <div class="symptom-category-title"><i class="fas fa-head-side-cough"></i> Simptoma të Përgjithshme</div>
+            <div id="generalSymptoms"></div>
+          </div>
+          
+          <div class="symptom-category">
+            <div class="symptom-category-title"><i class="fas fa-lungs"></i> Simptoma Respiratore</div>
+            <div id="respiratorySymptoms"></div>
+          </div>
+          
+          <div class="symptom-category">
+            <div class="symptom-category-title"><i class="fas fa-stomach"></i> Simptoma Gastrointestinale</div>
+            <div id="giSymptoms"></div>
+          </div>
+          
+          <div class="symptom-category">
+            <div class="symptom-category-title"><i class="fas fa-brain"></i> Simptoma Neurologjike</div>
+            <div id="neuroSymptoms"></div>
+          </div>
+          
+          <button class="btn" onclick="checkSymptoms()" style="width:100%;margin-top:20px;">
+            <i class="fas fa-search"></i> Analizo Simptomat
+          </button>
+        </div>
+        
+        <div class="symptom-results">
+          <div class="panel-title" style="font-size:1rem;"><i class="fas fa-diagnoses"></i> Rezultatet</div>
+          <div id="symptomCheckerResult" style="margin-top:15px;"></div>
+          
+          <div id="symptomSeverity" style="margin-top:20px;display:none;">
+            <div class="panel-title" style="font-size:1rem;"><i class="fas fa-exclamation-triangle"></i> Vlerësimi i Rrezikut</div>
+            <div id="severityResult"></div>
+          </div>
+          
+          <div id="recommendedActions" style="margin-top:20px;display:none;">
+            <div class="panel-title" style="font-size:1rem;"><i class="fas fa-clipboard-list"></i> Veprimet e Rekomanduara</div>
+            <div id="actionsList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Lista e plotë e simptomave të kategorizuara
+  const SYMPTOMS = {
+    general: [
+      { id: "ethe", name: "Ethe", icon: "temperature-high" },
+      { id: "lodhje", name: "Lodhje", icon: "bed" },
+      { id: "peshehumbje", name: "Humbje peshe", icon: "weight" },
+      { id: "dhimbje_trupi", name: "Dhimbje trupi", icon: "bone" },
+      { id: "djersitje", name: "Djersitje", icon: "water" },
+      { id: "zvere", name: "Zvërshërim", icon: "wind" }
+    ],
+    respiratory: [
+      { id: "kollitje", name: "Kollitje", icon: "head-side-cough" },
+      { id: "frymemarrje", name: "Vështirësi në frymëmarrje", icon: "lungs" },
+      { id: "gjakasje", name: "Gjakësjellje", icon: "wind" },
+      { id: "dhimbje_gjoks", name: "Dhimbje në gjoks", icon: "heart" },
+      { id: "fluturime", name: "Fluturime në vesh", icon: "ear" }
+    ],
+    gastrointestinal: [
+      { id: "diarre", name: "Diarre", icon: "toilet" },
+      { id: "vjellje", name: "Të vjella", icon: "vomit" },
+      { id: "dhimbje_barku", name: "Dhimbje barku", icon: "stomach" },
+      { id: "ndjenje_mare", name: "Ndjenjë të mërzitjes", icon: "dizzy" },
+      { id: "urth", name: "Urth", icon: "allergies" }
+    ],
+    neurological: [
+      { id: "dhimbje_koke", name: "Dhimbje koke", icon: "head-side" },
+      { id: "marramendje", name: "Marramendje", icon: "dizzy" },
+      { id: "humbje_vetedije", name: "Humbje vetëdije", icon: "brain" },
+      { id: "pengesa_pamje", name: "Pengesa në pamje", icon: "eye" },
+      { id: "tremujore", name: "Tremujore", icon: "hand-sparkles" }
+    ]
+  };
+
+  // Baza e të dhënave për kushtet mjekësore
+  const MEDICAL_CONDITIONS = [
+    {
+      name: "Grip",
+      symptoms: ["ethe", "dhimbje_trupi", "kollitje", "lodhje", "djersitje"],
+      description: "Infeksion viral i zakonshëm që shkakton ethe, dhimbje trupi dhe simptoma të tjera të ftohjes.",
+      severity: "moderate",
+      treatment: "Pushim, hidratim dhe ilaçe për ulje të simptomave.",
+      urgency: "low"
+    },
+    {
+      name: "COVID-19",
+      symptoms: ["ethe", "kollitje", "frymemarrje", "dhimbje_trupi", "humbje_shije"],
+      description: "Infeksion viral i shkaktuar nga SARS-CoV-2 që mund të shkaktojë simptoma nga të lehta deri te të rënda.",
+      severity: "high",
+      treatment: "Izolim, monitorim dhe trajtim simptomatik. Raste të rënda mund të kërkojnë spitalizim.",
+      urgency: "high"
+    },
+    {
+      name: "Gastroenterit",
+      symptoms: ["diarre", "vjellje", "dhimbje_barku", "ndjenje_mare"],
+      description: "Inflamacion i stomakut dhe zorrëve që shkakton diarre dhe të vjella.",
+      severity: "moderate",
+      treatment: "Hidratim, dieta e lehtë dhe pushim. Shmangni produktet e qumështit.",
+      urgency: "moderate"
+    },
+    {
+      name: "Migrenë",
+      symptoms: ["dhimbje_koke", "marramendje", "pengesa_pamje", "ndjenje_mare"],
+      description: "Dhimbje koke e rëndë që mund të zgjasë nga disa orë deri në disa ditë.",
+      severity: "moderate",
+      treatment: "Pushim në dritë të dobët, ilaçe kundër dhimbjes dhe shmangje e faktorëve shqetësues.",
+      urgency: "low"
+    },
+    {
+      name: "Infeksion urinar",
+      symptoms: ["djersitje", "dhimbje_barku", "djersitje_urinare", "ethe"],
+      description: "Infeksion në sistemin urinar që shkakton djersitje dhe dhimbje gjatë urinimit.",
+      severity: "moderate",
+      treatment: "Antibiotikë sipas rekomandimit të mjekut dhe shumë lëngje.",
+      urgency: "moderate"
+    },
+    {
+      name: "Hipertension",
+      symptoms: ["dhimbje_koke", "marramendje", "zvere", "lodhje"],
+      description: "Presion i lartë i gjakut që mund të çojë në probleme serioze shëndetësore.",
+      severity: "high",
+      treatment: "Ndryshime në stilin e jetesës dhe medikamente për ulje të tensionit.",
+      urgency: "high"
+    }
+  ];
+
+  // Paneli i përmbajtjes
+  const panels = {
+    shtepia: `<div class="panel-glass" id="homePanel" style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:center;">
+        <div style="display:flex;flex-direction:column;gap:18px;">
+          <div style="background:rgba(20,33,54,0.7);border-radius:18px;padding:30px 15px 20px 18px;box-shadow:0 0 18px rgba(22,255,243,0.3);">
+            <div style="font-size:1.3rem;color:#cafdff;font-weight:700;letter-spacing:1px;text-shadow:0 0 15px rgba(22,255,243,0.8);">
+              Mirë se vini në <span style="color:#16fff3;">Doctor Lumen</span>!
+            </div>
+            <div style="font-size:1.1rem;color:#92e7ff;margin:10px 0 8px 2px;font-weight:500;">
+              Platforma juaj mjekësore dixhitale.
+            </div>
+            <div style="margin:10px 0 8px 2px;font-size:1rem;color:#fffae6;font-style:italic;">
+              "Shëndeti është pasuria më e madhe që mund të zotërojmë."
+            </div>
+            <div class="mobile-btn-group">
+              <button class="btn" onclick="loadPanel('medikamente')">
+                <i class="fas fa-search-plus"></i> Kërko Ilaçe
+              </button>
+              <button class="btn" onclick="loadPanel('kalkulatore')">
+                <i class="fas fa-calculator"></i> Llogarit BMI
+              </button>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <div style="background:rgba(20,33,54,0.7);border-radius:15px;padding:10px 8px;min-width:120px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+              <div class="panel-title" style="font-size:1rem;margin-bottom:8px;"><i class="fas fa-file-medical"></i> Symptom Checker</div>
+              <p style="font-size:0.9rem;color:#cafdff;line-height:1.3;">
+                Përdor këtë mjet për të identifikuar simptomat e zakonshme.
+              </p>
+              <button class="btn" onclick="loadPanel('symptom-checker')" style="width:100%;font-size:0.9rem;padding:8px 10px;margin-top:10px;">Filloni</button>
+            </div>
+            <div style="background:rgba(20,33,54,0.7);border-radius:15px;padding:10px 8px;min-width:120px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+              <div class="panel-title" style="font-size:1rem;margin-bottom:8px;"><i class="fas fa-heartbeat"></i> Kontrollo Shëndetin</div>
+              <p style="font-size:0.9rem;color:#cafdff;line-height:1.3;">
+                Llogaritëse të ndryshme për monitorimin e shëndetit.
+              </p>
+              <button class="btn" onclick="loadPanel('kalkulatore')" style="width:100%;font-size:0.9rem;padding:8px 10px;margin-top:10px;">Shiko</button>
+            </div>
+          </div>
+          <div class="mobile-btn-group">
+            <button class="btn" onclick="loadPanel('medikamente')">
+              <i class="fas fa-plus"></i> Kërko medikament
+            </button>
+            <button class="btn" onclick="loadPanel('axhenda')">
+              <i class="fas fa-video"></i> Telemjekësi
+            </button>
+          </div>
+          <div style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+            <div class="panel-title" style="font-size:1rem;margin-bottom:8px;"><i class="fas fa-star"></i> Vlerësimet</div>
+            <p style="font-size:0.9rem;font-style:italic;color:#92e7ff;">"Doctor Lumen e ka thjeshtësuar shumë menaxhimin e pacientëve. Gjithçka në një vend!"</p>
+            <p style="font-size:0.8rem;text-align:right;color:#aaff00;margin-top:10px;">- Dr. Arta, Mjeke e Përgjithshme</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:15px;align-items:center;">
+          <img src="https://i.imgur.com/G5J4mYk.png" alt="Doctor Lumen Avatar" loading="lazy" style="width:180px;max-width:100%;border-radius:25px;box-shadow:0 0 20px rgba(22,255,243,0.9);">
+          <div style="width:100%;text-align:center;">
+            <div style="font-size:1.1rem;color:#16fff3;font-weight:700;margin-bottom:8px;letter-spacing:0.4px;">
+              <i class="fas fa-calendar-alt"></i> Kalendar
+            </div>
+            <div id="homeCalendar" style="padding:0 20px;"></div>
+          </div>
+          <div id="homeAnalogClock" style="padding-top:10px;"></div>
+          <button class="btn" onclick="window.open('https://wa.me/355672054470','_blank')" style="margin-top:15px;background:#122235;color:#16fff3;border:1.1px solid #16fff3;border-radius:18px;min-width:120px;align-self:flex-end;box-shadow:0 0 10px rgba(22,255,243,0.5);font-size:0.95rem;display:flex;align-items:center;gap:8px;">
+            <i class="fab fa-whatsapp"></i> Kontakto mjekun
+          </button>
+        </div>
+      </div>`,
+    
+    medikamente: `<div class="panel-glass" style="max-width: 900px; margin: 0 auto;">
+      <div class="panel-title"><i class="fas fa-pills"></i> Medikamente të Shpeshta</div>
+      <div style="font-size:0.9rem;color:#92e7ff;margin-bottom:15px;">
+        Informacion i përgjithshëm mbi medikamentet e zakonshme. Konsultohuni gjithmonë me mjekun tuaj përpara se të përdorni ndonjë medikament.
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:15px;">
+        <input type="text" id="searchInput" placeholder="Kërko për medikament..." onkeyup="filterMedikamente()" style="flex:1;">
+        <select id="filterSelect" onchange="filterMedikamente()" style="width:auto;">
+          <option value="">Të gjitha</option>
+          <option value="Dhimbje/Ethe">Dhimbje/Ethe</option>
+          <option value="Alergji">Alergji</option>
+          <option value="Infeksion">Infeksion</option>
+          <option value="Tretje">Tretje</option>
+          <option value="Kardio">Kardio</option>
+          <option value="Antibiotikë">Antibiotikë</option>
+          <option value="Diabet">Diabet</option>
+          <option value="Antidepresantë">Antidepresantë</option>
+          <option value="Antikoagulantë">Antikoagulantë</option>
+        </select>
+      </div>
+      <div class="scroll-x">
+        <table style="min-width: 800px;" id="medikamenteTable">
+          <thead>
+            <tr>
+              <th>Emri</th>
+              <th>Indikacionet (Përdoret për)</th>
+              <th>Efektet Anësore të zakonshme</th>
+              <th>Përdorimi i zakonshëm</th>
+              <th style="display:none;">Kategoria</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-kategori="Dhimbje/Ethe">
+              <td><span style="color:#16fff3;font-weight:600;">Paracetamol</span></td>
+              <td>Dhimbje, ethe</td>
+              <td>Rrallë: reaksione alergjike, dëmtim i mëlçisë (në doza të larta)</td>
+              <td>1-2 tableta (500mg) çdo 4-6 orë, deri në 4g/ditë</td>
+              <td style="display:none;">Dhimbje/Ethe</td>
+            </tr>
+            <tr data-kategori="Dhimbje/Ethe">
+              <td><span style="color:#16fff3;font-weight:600;">Ibuprofen</span></td>
+              <td>Dhimbje, ethe, inflamacion</td>
+              <td>Urth, dhimbje stomaku, marramendje</td>
+              <td>1-2 tableta (200mg) çdo 4-6 orë, me ushqim</td>
+              <td style="display:none;">Dhimbje/Ethe</td>
+            </tr>
+            <tr data-kategori="Infeksion">
+              <td><span style="color:#16fff3;font-weight:600;">Amoxicillin</span></td>
+              <td>Infeksione bakteriale (fyti, veshi)</td>
+              <td>Diarre, nauze, rash alergjik</td>
+              <td>Siç përshkruhet nga mjeku, zakonisht 3 herë në ditë</td>
+              <td style="display:none;">Infeksion</td>
+            </tr>
+            <tr data-kategori="Alergji">
+              <td><span style="color:#16fff3;font-weight:600;">Loratadine</span></td>
+              <td>Alergji, teshtitje, kruarje</td>
+              <td>Dhimbje koke, thatësi e gojës, lodhje</td>
+              <td>1 tabletë (10mg) në ditë</td>
+              <td style="display:none;">Alergji</td>
+            </tr>
+            <tr data-kategori="Tretje">
+              <td><span style="color:#16fff3;font-weight:600;">Omeprazole</span></td>
+              <td>Urth, refluks, ulçer stomaku</td>
+              <td>Dhimbje koke, dhimbje stomaku, diarre</td>
+              <td>1 tabletë (20mg) në ditë, zakonisht në mëngjes</td>
+              <td style="display:none;">Tretje</td>
+            </tr>
+            <tr data-kategori="Dhimbje/Ethe">
+              <td><span style="color:#16fff3;font-weight:600;">Aspirin</span></td>
+              <td>Dhimbje, ethe, hollues gjaku</td>
+              <td>Urth, rrezik gjakderdhje, dhimbje stomaku</td>
+              <td>Sipas rekomandimit të mjekut, me ushqim</td>
+              <td style="display:none;">Dhimbje/Ethe</td>
+            </tr>
+            <tr data-kategori="Infeksion">
+              <td><span style="color:#16fff3;font-weight:600;">Augmentin</span></td>
+              <td>Infeksione bakteriale të rënda, bronshit, pneumoni</td>
+              <td>Diarre, nauze, infeksione fungale (myk)</td>
+              <td>1 tabletë (625mg ose 1000mg) çdo 8-12 orë</td>
+              <td style="display:none;">Infeksion</td>
+            </tr>
+            <tr data-kategori="Kardio">
+              <td><span style="color:#16fff3;font-weight:600;">Metoprolol</span></td>
+              <td>Hipertension, angina, aritmi</td>
+              <td>Lodhje, marramendje, ndjesi të ftohti në gjymtyrë</td>
+              <td>Siç përshkruhet nga mjeku, zakonisht 1 ose 2 herë në ditë</td>
+              <td style="display:none;">Kardio</td>
+            </tr>
+            <tr data-kategori="Kardio">
+              <td><span style="color:#16fff3;font-weight:600;">Atorvastatin</span></td>
+              <td>Kolesterol i lartë</td>
+              <td>Dhimbje muskujsh, dhimbje koke, nauze</td>
+              <td>1 tabletë (10-80mg) në ditë, në mbrëmje</td>
+              <td style="display:none;">Kardio</td>
+            </tr>
+            <tr data-kategori="Antibiotikë">
+              <td><span style="color:#16fff3;font-weight:600;">Cephalexin</span></td>
+              <td>Infeksione bakteriale (lëkurë, urinare, respiratore)</td>
+              <td>Diarre, dhimbje barku, reaksione alergjike</td>
+              <td>250-500mg çdo 6-12 orë, sipas rekomandimit të mjekut</td>
+              <td style="display:none;">Antibiotikë</td>
+            </tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Amoxicillin</span></td>
+  <td>Infeksione të rrugëve respiratore, otite, sinusite, infeksione urinare</td>
+  <td>Diarré, reaksione alergjike, skuqje lëkure</td>
+  <td>500mg çdo 8 orë ose 1g çdo 12 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Amoxicillin/Clavulanic Acid</span></td>
+  <td>Infeksione të rrugëve të frymëmarrjes, infeksione të lëkurës, urinare</td>
+  <td>Diarré, nauze, skuqje, reaksione alergjike</td>
+  <td>500/125mg ose 875/125mg çdo 8-12 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Cefuroxime</span></td>
+  <td>Infeksione të rrugëve të frymëmarrjes, otite, infeksione urinare</td>
+  <td>Diarré, dhimbje barku, nauze</td>
+  <td>250-500mg çdo 12 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Azithromycin</span></td>
+  <td>Infeksione respiratore, uretrite, infeksione të lëkurës</td>
+  <td>Nauze, të vjella, diarre</td>
+  <td>500mg 1 herë në ditë për 3-5 ditë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Clarithromycin</span></td>
+  <td>Infeksione respiratore, infeksione të lëkurës, ulçera peptike (H. pylori)</td>
+  <td>Nauze, shqetësime gastrointestinale, ndryshime shijeje</td>
+  <td>250-500mg çdo 12 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Doxycycline</span></td>
+  <td>Infeksione respiratore, klamidia, akne, sëmundje të bartura nga rriqrat</td>
+  <td>Ndjeshmëri ndaj diellit, nauze, diarre</td>
+  <td>100mg çdo 12 orë (pastaj 100mg 1x/dite)</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Ciprofloxacin</span></td>
+  <td>Infeksione urinare, gastrointestinale, prostatite, infeksione të rënda bakteriale</td>
+  <td>Tendinit, çrregullime të tretjes, marramendje</td>
+  <td>250-750mg çdo 12 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Levofloxacin</span></td>
+  <td>Infeksione respiratore, infeksione urinare, prostatite</td>
+  <td>Çrregullime gastrointestinale, tendinit, insomni</td>
+  <td>500mg 1 herë në ditë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Moxifloxacin</span></td>
+  <td>Infeksione të rënda të rrugëve të frymëmarrjes, infeksione të lëkurës</td>
+  <td>Nauze, diarre, ndjeshmëri ndaj dritës</td>
+  <td>400mg 1 herë në ditë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Clindamycin</span></td>
+  <td>Infeksione të lëkurës, kockave, abscese dentare, infeksione intra-abdominale</td>
+  <td>Diarre, kolit pseudomembranoz, skuqje</td>
+  <td>150-450mg çdo 6-8 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Cephalexin</span></td>
+  <td>Infeksione bakteriale (lëkurë, urinare, respiratore)</td>
+  <td>Diarre, dhimbje barku, reaksione alergjike</td>
+  <td>250-500mg çdo 6-12 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Ceftriaxone</span></td>
+  <td>Infeksione të rënda sistemike, meningite, pneumoni, gonorrhea</td>
+  <td>Dhimbje vendi i injektimit, diarre, reaksione alergjike</td>
+  <td>1-2g IM/IV 1x/ditë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Cefixime</span></td>
+  <td>Infeksione urinare, otite, infeksione të rrugëve të frymëmarrjes</td>
+  <td>Nauze, diarre, skuqje lëkure</td>
+  <td>200-400mg 1x/ditë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Nitrofurantoin</span></td>
+  <td>Infeksione të rrugëve urinare (cistite)</td>
+  <td>Nauze, diarre, urinë e errët</td>
+  <td>50-100mg çdo 6 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Fosfomycin</span></td>
+  <td>Cistite akute, infeksione urinare të lehta</td>
+  <td>Diarré, nauze, skuqje lëkure</td>
+  <td>3g dozë e vetme (oral)</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Trimethoprim/Sulfamethoxazole</span></td>
+  <td>Infeksione urinare, bronkite, pneumoni të lehta</td>
+  <td>Alergi, skuqje lëkure, nauze</td>
+  <td>800/160mg çdo 12 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Gentamicin</span></td>
+  <td>Infeksione të rënda sistemike, sepsis, infeksione abdominale</td>
+  <td>Ototoksicitet, nefrotoksicitet, vertigo</td>
+  <td>3-5mg/kg/ditë IM/IV</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Vancomycin</span></td>
+  <td>Infeksione të rënda të lëkurës, MRSA, endokardite</td>
+  <td>Nefrotoksicitet, reaksione të lëkurës, ototoksicitet</td>
+  <td>15-20mg/kg IV çdo 8-12 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Metronidazole</span></td>
+  <td>Infeksione anaerobe, infeksione pelvike, giardia, amebiaza</td>
+  <td>Shije metalike, nauze, marramendje</td>
+  <td>500mg çdo 8-12 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Linezolid</span></td>
+  <td>Infeksione të rënda të lëkurës, pneumoni, MRSA, VRE</td>
+  <td>Dhimbje koke, trombocitopeni, diarre</td>
+  <td>600mg çdo 12 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<!-- 20 të parë -->
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Imipenem/Cilastatin</span></td>
+  <td>Infeksione të rënda abdominale, respiratore, urinare</td>
+  <td>Nauze, diare, konvulsione (rrallë)</td>
+  <td>500mg-1g IV çdo 6-8 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Meropenem</span></td>
+  <td>Infeksione të rënda sistemike, meningite, sepsis</td>
+  <td>Nauze, diarre, rash</td>
+  <td>500mg-2g IV çdo 8 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Ertapenem</span></td>
+  <td>Infeksione abdominale, pelvike, urinare</td>
+  <td>Diarre, nauze, skuqje lëkure</td>
+  <td>1g IV/IM 1 herë në ditë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Piperacillin/Tazobactam</span></td>
+  <td>Infeksione të rënda spitalore, pneumonia, infeksione intra-abdominale</td>
+  <td>Diarre, ndryshim param. laboratorik, rash</td>
+  <td>4.5g IV çdo 6-8 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Tigecycline</span></td>
+  <td>Infeksione të lëkurës, abdominit, pneumoni komunitare</td>
+  <td>Nauze, vjellje, diarre</td>
+  <td>100mg dozë fillestare, pastaj 50mg çdo 12 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Teicoplanin</span></td>
+  <td>Infeksione të rënda Gram+, endokardit, septikemi</td>
+  <td>Rash, prurit, skuqje lëkure</td>
+  <td>6-12mg/kg IV/IM 1 herë në ditë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Cefepime</span></td>
+  <td>Infeksione të rënda nosokomiale, pneumonia, neutropeni febrile</td>
+  <td>Diarre, rash, dhimbje koke</td>
+  <td>1-2g IV çdo 8-12 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Ceftazidime</span></td>
+  <td>Infeksione të rënda Gram-, pneumonia, infeksione urinare</td>
+  <td>Diarre, skuqje lëkure, nauze</td>
+  <td>1-2g IV çdo 8-12 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Cefotaxime</span></td>
+  <td>Infeksione të rënda, meningite, pneumonia</td>
+  <td>Diarre, rash, nauze</td>
+  <td>1-2g IV çdo 8-12 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Ampicillin</span></td>
+  <td>Infeksione të rrugëve të frymëmarrjes, urinare, meningite</td>
+  <td>Rash, diarre, nauze</td>
+  <td>250-500mg çdo 6 orë (IM/IV/PO)</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Ampicillin/Sulbactam</span></td>
+  <td>Infeksione të rrugëve të frymëmarrjes, intra-abdominale, lëkurës</td>
+  <td>Diarre, rash, nauze</td>
+  <td>1.5-3g IV/IM çdo 6-8 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Penicillin V</span></td>
+  <td>Infeksione të fytit, angina streptokoksike, sifiliz</td>
+  <td>Rash, diarre, nauze</td>
+  <td>250-500mg çdo 6-8 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Penicillin G</span></td>
+  <td>Sifiliz, infeksione streptokoksike, meningite</td>
+  <td>Rash, diarre, reaksione alergjike</td>
+  <td>1-4 milion IU çdo 4-6 orë (IV/IM)</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Oxacillin</span></td>
+  <td>Infeksione stafilokoksike, celulite, absces</td>
+  <td>Rash, diarre, dhimbje stomaku</td>
+  <td>250-500mg çdo 6 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Nafcillin</span></td>
+  <td>Infeksione stafilokoksike rezistente ndaj penicilinës</td>
+  <td>Rash, diarre, nauze</td>
+  <td>1-2g IV çdo 4-6 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Dicloxacillin</span></td>
+  <td>Infeksione të lëkurës, celulite, absces</td>
+  <td>Rash, diarre, shqetësime gastrointestinale</td>
+  <td>250-500mg çdo 6 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Minocycline</span></td>
+  <td>Akne, infeksione të lëkurës, infeksione respiratore</td>
+  <td>Ndjeshmëri ndaj diellit, marramendje, diarre</td>
+  <td>100mg çdo 12 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Rifampin</span></td>
+  <td>Tuberkuloz, meningite, profilaksi për Neisseria meningitidis</td>
+  <td>Urina e kuqe, hepatotoksicitet, çrregullime gastrointestinale</td>
+  <td>600mg 1x/ditë ose 300mg çdo 12 orë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Ethambutol</span></td>
+  <td>Tuberkuloz (kombinim), infeksione mikobakteriale</td>
+  <td>Çrregullime shikimi, rash, nauze</td>
+  <td>15-25mg/kg 1x/ditë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Pyrazinamide</span></td>
+  <td>Tuberkuloz (kombinim)</td>
+  <td>Hepatotoksicitet, nauze, rash</td>
+  <td>15-30mg/kg 1x/ditë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Isoniazid</span></td>
+  <td>Tuberkuloz (kombinim)</td>
+  <td>Hepatotoksicitet, neuropati periferike, rash</td>
+  <td>5mg/kg 1x/ditë</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Streptomycin</span></td>
+  <td>Tuberkuloz (kombinim), infeksione Gram-</td>
+  <td>Ototoksicitet, nefrotoksicitet</td>
+  <td>15mg/kg 1x/ditë (IM/IV)</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Colistin</span></td>
+  <td>Infeksione të rënda Gram- rezistente</td>
+  <td>Nefrotoksicitet, neurotoksicitet</td>
+  <td>2.5-5mg/kg/ditë IV/IM</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Polymyxin B</span></td>
+  <td>Infeksione të rënda Gram- (spitalore)</td>
+  <td>Nefrotoksicitet, neurotoksicitet</td>
+  <td>1.5-2.5mg/kg/ditë IV/IM</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Chloramphenicol</span></td>
+  <td>Infeksione të rënda, meningite (rezervë)</td>
+  <td>Depresion i palcës, rash, diarre</td>
+  <td>50-100mg/kg/ditë IV/PO</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<tr data-kategori="Antibiotikë">
+  <td><span style="color:#16fff3;font-weight:600;">Spectinomycin</span></td>
+  <td>Gonorrhea (alternative)</td>
+  <td>Dhimbje vendi injektimit, rash</td>
+  <td>2g IM dozë e vetme</td>
+  <td style="display:none;">Antibiotikë</td>
+</tr>
+<!-- 50 antibiotikët kryesorë -->
+
+            <tr data-kategori="Antibiotikë">
+              <td><span style="color:#16fff3;font-weight:600;">Azithromycin</span></td>
+              <td>Infeksione bakteriale (fyti, mushkëritë, uretra)</td>
+              <td>Nauze, dhimbje barku, diarre</td>
+              <td>500mg në ditë për 3 ditë, ose një dozë unike</td>
+              <td style="display:none;">Antibiotikë</td>
+            </tr>
+            <tr data-kategori="Diabet">
+              <td><span style="color:#16fff3;font-weight:600;">Metformin</span></td>
+              <td>Diabet tip 2</td>
+              <td>Diarre, dhimbje barku, shije metalike</td>
+              <td>500-850mg 2-3 herë në ditë, me ushqim</td>
+              <td style="display:none;">Diabet</td>
+            </tr>
+            <tr data-kategori="Diabet">
+              <td><span style="color:#16fff3;font-weight:600;">Gliclazide</span></td>
+              <td>Diabet tip 2</td>
+              <td>Hipoglicemi, dhimbje koke, marramendje</td>
+              <td>40-320mg në ditë, sipas rekomandimit të mjekut</td>
+              <td style="display:none;">Diabet</td>
+            </tr>
+            <tr data-kategori="Antidepresantë">
+              <td><span style="color:#16fff3;font-weight:600;">Sertraline</span></td>
+              <td>Depresion, ankth, OCD</td>
+              <td>Dhimbje koke, marramendje, lodhje</td>
+              <td>50-200mg në ditë, zakonisht në mëngjes</td>
+              <td style="display:none;">Antidepresantë</td>
+            </tr>
+            <tr data-kategori="Antidepresantë">
+              <td><span style="color:#16fff3;font-weight:600;">Fluoxetine</span></td>
+              <td>Depresion, ankth, bulimia</td>
+              <td>Nauze, dhimbje koke, marramendje</td>
+              <td>20-80mg në ditë, zakonisht në mëngjes</td>
+              <td style="display:none;">Antidepresantë</td>
+            </tr>
+            <tr data-kategori="Antikoagulantë">
+              <td><span style="color:#16fff3;font-weight:600;">Warfarin</span></td>
+              <td>Parandalim i mpiksjeve të gjakut</td>
+              <td>Rrezik gjakderdhje, dhimbje muskujsh</td>
+              <td>Doza individuale, bazuar në INR</td>
+              <td style="display:none;">Antikoagulantë</td>
+            </tr>
+            <tr data-kategori="Antikoagulantë">
+              <td><span style="color:#16fff3;font-weight:600;">Rivaroxaban</span></td>
+              <td>Parandalim i mpiksjeve të gjakut</td>
+              <td>Rrezik gjakderdhje, dhimbje barku</td>
+              <td>10-20mg në ditë, sipas rekomandimit të mjekut</td>
+              <td style="display:none;">Antikoagulantë</td>
+            </tr>
+            <tr data-kategori="Kardio">
+              <td><span style="color:#16fff3;font-weight:600;">Losartan</span></td>
+              <td>Hipertension, mbrojtje e veshkave</td>
+              <td>Marramendje, lodhje, rënie e tensionit</td>
+              <td>50-100mg në ditë, sipas rekomandimit të mjekut</td>
+              <td style="display:none;">Kardio</td>
+            </tr>
+            <tr data-kategori="Kardio">
+              <td><span style="color:#16fff3;font-weight:600;">Amlodipine</span></td>
+              <td>Hipertension, angina</td>
+              <td>Edem në kyçe, dhimbje koke, lodhje</td>
+              <td>5-10mg në ditë, sipas rekomandimit të mjekut</td>
+              <td style="display:none;">Kardio</td>
+            </tr>
+            <tr data-kategori="Tretje">
+              <td><span style="color:#16fff3;font-weight:600;">Ranitidine</span></td>
+              <td>Ulçera stomaku, refluks</td>
+              <td>Dhimbje koke, marramendje, diarre</td>
+              <td>150mg 2 herë në ditë ose 300mg në mbrëmje</td>
+              <td style="display:none;">Tretje</td>
+            </tr>
+            <tr data-kategori="Tretje">
+              <td><span style="color:#16fff3;font-weight:600;">Domperidone</span></td>
+              <td>Nauze, të vjella</td>
+              <td>Dhimbje koke, marramendje, kthetra</td>
+              <td>10mg 3-4 herë në ditë, para vaktit</td>
+              <td style="display:none;">Tretje</td>
+            </tr>
+            <tr data-kategori="Alergji">
+              <td><span style="color:#16fff3;font-weight:600;">Cetirizine</span></td>
+              <td>Alergji, kruarje, urth</td>
+              <td>Lodhje, thatësi e gojës, dhimbje koke</td>
+              <td>10mg në ditë, në mbrëmje</td>
+              <td style="display:none;">Alergji</td>
+            </tr>
+            <tr data-kategori="Alergji">
+              <td><span style="color:#16fff3;font-weight:600;">Fexofenadine</span></td>
+              <td>Alergji, rinitis alergjik</td>
+              <td>Dhimbje koke, lodhje, marramendje</td>
+              <td>120-180mg në ditë, sipas rekomandimit të mjekut</td>
+              <td style="display:none;">Alergji</td>
+            </tr>
+            <tr data-kategori="Dhimbje/Ethe">
+              <td><span style="color:#16fff3;font-weight:600;">Diclofenac</span></td>
+              <td>Dhimbje, inflamacion, ethe</td>
+              <td>Dhimbje stomaku, ulçera, probleme me veshkat</td>
+              <td>50mg 2-3 herë në ditë, me ushqim</td>
+              <td style="display:none;">Dhimbje/Ethe</td>
+            </tr>
+            <tr data-kategori="Dhimbje/Ethe">
+              <td><span style="color:#16fff3;font-weight:600;">Tramadol</span></td>
+              <td>Dhimbje të moderuara deri të rënda</td>
+              <td>Marramendje, të vjella, varësi</td>
+              <td>50-100mg çdo 4-6 orë, sipas rekomandimit të mjekut</td>
+              <td style="display:none;">Dhimbje/Ethe</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>`,
+    
+    kalkulatore: `<div class="panel-glass" style="max-width: 800px; margin: 0 auto;">
+      <div class="panel-title"><i class="fas fa-calculator"></i> Kalkulatore Mjekësore</div>
+      <div style="display:grid;grid-template-columns:1fr;gap:20px;margin-top:20px;">
+        <div style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+          <div class="panel-title" style="font-size:1rem;"><i class="fas fa-weight"></i> Kalkulatori i BMI</div>
+          <p style="font-size:0.9rem;color:#92e7ff;margin-bottom:15px;">
+            Llogaritni Indeksin e Masës Trupore (BMI) për të vlerësuar peshën tuaj.
+          </p>
+          <label>Pesha (kg)</label><input id="bmiPesha" type="number" step="0.1" placeholder="P.sh. 70" style="margin-bottom:8px;">
+          <label>Gjatësia (cm)</label><input id="bmiGjatesia" type="number" step="1" placeholder="P.sh. 175">
+          <button class="btn" style="width:100%;" onclick="llogaritBMI()">Llogarit BMI</button>
+          <div id="bmiRezultati" style="margin-top:15px;font-weight:600;"></div>
+        </div>
+        
+        <div style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+          <div class="panel-title" style="font-size:1rem;"><i class="fas fa-prescription-bottle"></i> Kalkulator Dozash Paracetamoli për Fëmijë</div>
+          <p style="font-size:0.9rem;color:#92e7ff;margin-bottom:15px;">
+            Llogaritja e një doze të përgjithshme Paracetamoli bazuar në peshën e fëmijës.
+            <br><small style="color:#ff5555;font-size:0.8rem;font-weight:500;">(Vërejtje: 15mg/kg, çdo 6 orë. Konsultohuni me mjekun.)</small>
+          </p>
+          <label>Pesha e fëmijës (kg)</label><input id="dozaPesha" type="number" step="0.1" placeholder="P.sh. 15">
+          <button class="btn" style="width:100%;" onclick="llogaritDozenParacetamol()">Llogarit dozën</button>
+          <div id="dozaParacetamolRezultati" style="margin-top:15px;font-weight:600;"></div>
+        </div>
+        
+        <div style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+          <div class="panel-title" style="font-size:1rem;"><i class="fas fa-prescription-bottle-alt"></i> Kalkulator Dozash Cefalosporinë për Fëmijë</div>
+          <p style="font-size:0.9rem;color:#92e7ff;margin-bottom:15px;">
+            Llogaritja e një doze të përgjithshme Cefalosporinë (p.sh., Cephalexin) bazuar në peshën e fëmijës.
+            <br><small style="color:#ff5555;font-size:0.8rem;font-weight:500;">(Vërejtje: 25-50 mg/kg/ditë, ndarë në 2-4 doza. Konsultohuni me mjekun.)</small>
+          </p>
+          <label>Pesha e fëmijës (kg)</label><input id="dozaCefaPesha" type="number" step="0.1" placeholder="P.sh. 20">
+          <button class="btn" style="width:100%;" onclick="llogaritDozenCefa()">Llogarit dozën</button>
+          <div id="dozaCefaRezultati" style="margin-top:15px;font-weight:600;"></div>
+        </div>
+        
+        <div style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+          <div class="panel-title" style="font-size:1rem;"><i class="fas fa-heartbeat"></i> Kalkulator Dozash Heparinë</div>
+          <p style="font-size:0.9rem;color:#92e7ff;margin-bottom:15px;">
+            Llogaritja e dozës së heparinës bazuar në peshën e pacientit.
+            <br><small style="color:#ff5555;font-size:0.8rem;font-weight:500;">(Vërejtje: 80 IU/kg fillimisht, pastaj 18 IU/kg/orë. Konsultohuni me mjekun.)</small>
+          </p>
+          <label>Pesha e pacientit (kg)</label><input id="dozaHeparinaPesha" type="number" step="0.1" placeholder="P.sh. 70">
+          <button class="btn" style="width:100%;" onclick="llogaritDozenHeparina()">Llogarit dozën</button>
+          <div id="dozaHeparinaRezultati" style="margin-top:15px;font-weight:600;"></div>
+        </div>
+        
+        <div style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+          <div class="panel-title" style="font-size:1rem;"><i class="fas fa-kidneys"></i> Llogaritja e GFR (eGFR)</div>
+          <p style="font-size:0.9rem;color:#92e7ff;margin-bottom:15px;">
+            Llogaritja e vlerësuar e shkallës së filtrimit glomerular (eGFR) sipas formulës CKD-EPI.
+          </p>
+          <label>Mosha (vjet)</label><input id="gfrMosha" type="number" placeholder="P.sh. 45" style="margin-bottom:8px;">
+          <label>Gjinia</label>
+          <select id="gfrGjinia" style="margin-bottom:8px;">
+            <option value="M">Mashkull</option>
+            <option value="F">Femër</option>
+          </select>
+          <label>Kreatinina (mg/dL)</label><input id="gfrKreatinina" type="number" step="0.01" placeholder="P.sh. 0.9">
+          <button class="btn" style="width:100%;" onclick="llogaritGFR()">Llogarit GFR</button>
+          <div id="gfrRezultati" style="margin-top:15px;font-weight:600;"></div>
+        </div>
+        
+        <div style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+          <div class="panel-title" style="font-size:1rem;"><i class="fas fa-heart"></i> Llogaritja e Rrezikut Kardio</div>
+          <p style="font-size:0.9rem;color:#92e7ff;margin-bottom:15px;">
+            Llogaritja e rrezikut për sëmundje kardiovaskulare në 10 vjet (Framingham Risk Score).
+          </p>
+          <label>Mosha (vjet)</label><input id="cardioAge" type="number" placeholder="P.sh. 45" style="margin-bottom:8px;">
+          <label>Gjinia</label>
+          <select id="cardioGender" style="margin-bottom:8px;">
+            <option value="M">Mashkull</option>
+            <option value="F">Femër</option>
+          </select>
+          <label>Tensioni sistolik (mmHg)</label><input id="cardioSBP" type="number" placeholder="P.sh. 120">
+          <label>Kolesterol total (mg/dL)</label><input id="cardioChol" type="number" placeholder="P.sh. 200">
+          <label>Kolesterol HDL (mg/dL)</label><input id="cardioHDL" type="number" placeholder="P.sh. 50">
+          <label>Pacient i duhanpirës?</label>
+          <select id="cardioSmoker" style="margin-bottom:8px;">
+            <option value="0">Jo</option>
+            <option value="1">Po</option>
+          </select>
+          <button class="btn" style="width:100%;" onclick="llogaritRrezikKardio()">Llogarit Rrezikun</button>
+          <div id="cardioResult" style="margin-top:15px;font-weight:600;"></div>
+        </div>
+      </div>
+    </div>`,
+    
+    artikuj: `<div class="panel-glass" style="max-width: 900px; margin: 0 auto;">
+      <div class="panel-title"><i class="fas fa-newspaper"></i> Artikuj Mjeksorë të Përditësuar</div>
+      <div id="artikujContainer" style="display:grid;gap:20px;margin-top:20px;">
+        <div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+          <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-temperature-high"></i> Ethe (Ekspertizë Familjare)</div>
+          <div style="color:#92e7ff;margin-bottom:10px;">
+            <p><b>Çfarë është:</b> Temperatura është përgjigja natyrale e trupit ndaj infeksioneve. Ajo sinjalizon se sistemi imunitar po lufton një virus ose bakter.</p>
+            <p><b>Ankesat Kryesore:</b> Temperaturë e lartë, dhimbje koke, dhimbje trupi, lodhje.</p>
+            <p><b>Vlerat Laboratorike:</b> Rënia e leukociteve (nëse shkaktohet nga virus), rritja e CRP-së (në infeksione).</p>
+            <p><b>Këshilla Për Pacientin:</b> Qëndroni i hidratuar (ujë, çaj), përdorni paracetamol ose ibuprofen për të ulur temperaturën. Pushoni është thelbësor. Kontaktoni mjekun nëse ethet zgjasin më shumë se 3 ditë.</p>
+          </div>
+        </div>
+        
+        <div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+          <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-heartbeat"></i> Hipertensioni (Tensioni i lartë)</div>
+          <div style="color:#92e7ff;margin-bottom:10px;">
+            <p><b>Çfarë është:</b> Hipertensioni është një gjendje ku presioni i gjakut në arterie mbetet i lartë për një kohë të gjatë. Kjo mund të çojë në probleme serioze shëndetësore.</p>
+            <p><b>Ankesat Kryesore:</b> Zakonisht pa simptoma, por mund të shkaktojë dhimbje koke, marramendje, lodhje.</p>
+            <p><b>Vlerat Laboratorike:</b> Kërkohet matje e tensionit arterial në kohëzgjatje. Kontroll rutinë i kolesterolit dhe sheqerit në gjak.</p>
+            <p><b>Këshilla Për Pacientin:</b> Reduktoni kripën, ushtroni rregullisht, mbani peshë të shëndetshme dhe shmangni stresin. Matni rregullisht tensionin dhe ndiqni këshillat e mjekut.</p>
+          </div>
+        </div>
+        
+        <div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+          <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-stomach"></i> Gastroenteriti (Gripi i Stomakut)</div>
+          <div style="color:#92e7ff;margin-bottom:10px;">
+            <p><b>Çfarë është:</b> Gastroenteriti është inflamacioni i stomakut dhe zorrëve, i shkaktuar kryesisht nga viruse (p.sh., norovirus) ose baktere.</p>
+            <p><b>Ankesat Kryesore:</b> Diarre, të vjella, dhimbje barku, ndonjëherë ethe.</p>
+            <p><b>Vlerat Laboratorike:</b> Zakonisht nuk kërkohen, por mund të shfaqet dehidrim.</p>
+            <p><b>Këshilla Për Pacientin:</b> Hidratohuni me lëngje dhe elektrolitë. Konsumoni ushqime të lehta (banane, oriz, bukë të thekur). Shmangni produktet e qumështit. Kontaktoni mjekun nëse simptomat përkeqësohen ose zgjasin.</p>
+          </div>
+        </div>
+        
+        <div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+          <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-diabetes"></i> Diabeti i Tipit 2</div>
+          <div style="color:#92e7ff;margin-bottom:10px;">
+            <p><b>Çfarë është:</b> Diabeti i tipit 2 është një gjendje kronike ku trupi ose nuk prodhon insulinë të mjaftueshme, ose nuk e përdor atë në mënyrë efektive. Kjo çon në nivele të larta të sheqerit në gjak.</p>
+            <p><b>Ankesat Kryesore:</b> Etje e shtuar, urinimi i shpeshtë, lodhje, shikim i turbullt, shërim i ngadalshëm i plagëve.</p>
+            <p><b>Diagnostikimi:</b> Matja e nivelit të sheqerit në gjak agjërim (glukozë) ose A1C.</p>
+            <p><b>Këshilla Për Pacientin:</b> Bëni një dietë të shëndetshme, mbani një peshë normale, ushtroni rregullisht. Ndiqni planin e trajtimit të përshkruar nga mjeku, duke përfshirë medikamentet orale ose insulinën.</p>
+          </div>
+        </div>
+        
+        <div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+          <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-lungs"></i> Astma Bronkiale</div>
+          <div style="color:#92e7ff;margin-bottom:10px;">
+            <p><b>Çfarë është:</b> Astma është një sëmundje kronike e frymëmarrjes që shkakton ngushtimin e rrugëve të frymëmarrjes dhe inflamacion.</p>
+            <p><b>Ankesat Kryesore:</b> Vështirësi në frymëmarrje, gjakësjellje, ndjenjë ngushtimi në gjoks.</p>
+            <p><b>Vlerat Laboratorike:</b> Spirometria tregon pengesa në rrugët e frymëmarrjes.</p>
+            <p><b>Këshilla Për Pacientin:</b> Shmangni faktorët shqetësues si tymi, pluhuri. Përdorni inhalatorët siç janë përshkruar. Kontrolloni rregullisht me mjekun tuaj.</p>
+          </div>
+        </div>
+        
+        <div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+          <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-bone"></i> Osteoartriti</div>
+          <div style="color:#92e7ff;margin-bottom:10px;">
+            <p><b>Çfarë është:</b> Osteoartriti është një sëmundje degenerative e nyjeve që shkakton shkatërrimin e kartilazhit dhe dhimbje.</p>
+            <p><b>Ankesat Kryesore:</b> Dhimbje në nyje, ngurtësi, vështirësi në lëvizje.</p>
+            <p><b>Vlerat Laboratorike:</b> Radiografia tregon ngushtimin e hapësirës së nyjës dhe osteofite.</p>
+            <p><b>Këshilla Për Pacientin:</b> Ushtrime me peshë të lehtë, mbajtja e peshës së shëndetshme, përdorimi i ilaçeve kundër dhimbjes sipas rekomandimit të mjekut.</p>
+          </div>
+        </div>
+        
+        <div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+          <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-brain"></i> Depresioni dhe Ankthi</div>
+          <div style="color:#92e7ff;margin-bottom:10px;">
+            <p><b>Çfarë është:</b> Çrregullime të shëndetit mendor që shkaktojnë ndjenja të zymta, humbje interesesh dhe ankth të tepruar.</p>
+            <p><b>Ankesat Kryesore:</b> Humorie e ulët, humbje energjie, vështirësi në koncentrim, ndjenjë pafuqie, shqetësime të shumta.</p>
+            <p><b>Diagnostikimi:</b> Bazohet në intervistë klinike dhe vlerësim psikologjik. Nuk ka teste laboratorike specifike.</p>
+            <p><b>Këshilla Për Pacientin:</b> Terapi sjellësore, ndërhyrje farmakologjike (nëse nevojitet), ushtrime fizike, teknikë relaksimi dhe mbështetje sociale.</p>
+          </div>
+        </div>
+<div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+  <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-heartbeat"></i> Hipertensioni Arterial</div>
+  <div style="color:#92e7ff;margin-bottom:10px;">
+    <p><b>Çfarë është:</b> Hipertensioni është rritja e tensionit të gjakut mbi vlerat normale, duke rritur rrezikun për sëmundje të zemrës, goditje cerebrale dhe probleme të tjera shëndetësore.</p>
+    <p><b>Ankesat Kryesore:</b> Dhimbje koke, marramendje, lodhje, vështirësi në frymëmarrje, ndonjëherë asimptomatik.</p>
+    <p><b>Diagnostikimi:</b> Matja e vazhdueshme e tensionit të gjakut, analizat laboratorike dhe EKG.</p>
+    <p><b>Këshilla Për Pacientin:</b> Ulni kripën, rrisni aktivitetin fizik, humbni peshë, shmangni alkoolin dhe duhanin. Ndiqni trajtimin sipas këshillës së mjekut.</p>
+  </div>
 </div>
-</section>
-<section id="agenda" class="agenda">
-<h2>Agjenda</h2>
-<ul>
-<li>09:00 - Konsultim me pacientët</li>
-<li>12:00 - Pushim Dreke</li>
-<li>14:00 - Takime klinike</li>
-<li>16:00 - Vizita ne terren</li>
-</ul>
-</section>
-<section id="sektori">
-<h2>Sektori i Ri</h2>
-<p>Këtu mund të shtoni informacione rreth një sektori të ri të klinikës suaj ose shërbi me të reja. Për shembull, mund të prezantoni shërmet e reja që ofroni ose projektet e ardhshme.</p>
-</section>
-<footer>
-<p>&copy; 2025 Dr. Lumen. Të gjitha të drejtat e rezervuara.</p>
-</footer>
+
+<div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+  <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-lungs"></i> Astma Bronkiale</div>
+  <div style="color:#92e7ff;margin-bottom:10px;">
+    <p><b>Çfarë është:</b> Astma është një sëmundje kronike e rrugëve të frymëmarrjes, që shkakton ngushtim dhe inflamacion të tyre.</p>
+    <p><b>Ankesat Kryesore:</b> Kollë e thatë, vështirësi në frymëmarrje, fishkëllima në gjoks, ndjesi shtrëngimi në kraharor.</p>
+    <p><b>Diagnostikimi:</b> Spirometri, test alergjie, vlerësim klinik.</p>
+    <p><b>Këshilla Për Pacientin:</b> Shmangni faktorët shkaktarë, përdorni medikamentet inhalatore të përshkruara, monitoroni shenjat e përkeqësimit.</p>
+  </div>
+</div>
+
+<div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+  <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-virus"></i> Infeksioni me Covid-19</div>
+  <div style="color:#92e7ff;margin-bottom:10px;">
+    <p><b>Çfarë është:</b> Covid-19 është një infeksion viral që prek kryesisht sistemin respirator dhe përhapet lehtësisht nga personi në person.</p>
+    <p><b>Ankesat Kryesore:</b> Temperaturë, kollë, lodhje, humbje të shijes/nuhatjes, dhimbje muskujsh, vështirësi në frymëmarrje.</p>
+    <p><b>Diagnostikimi:</b> Test PCR ose antigjen, radiografi torakale, laboratorë.</p>
+    <p><b>Këshilla Për Pacientin:</b> Izolohu, hidrato trupin, kontrollo shenjat alarmuese, ndiq trajtimin mjekësor të rekomanduar.</p>
+  </div>
+</div>
+
+<div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+  <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-allergies"></i> Alergjitë Stinore</div>
+  <div style="color:#92e7ff;margin-bottom:10px;">
+    <p><b>Çfarë është:</b> Alergjitë janë reagime të sistemit imunitar ndaj substancave të padëmshme, si polenet ose pluhuri.</p>
+    <p><b>Ankesat Kryesore:</b> Teshtitje, rrjedhje hundësh, kruarje sysh, skuqje lëkure.</p>
+    <p><b>Diagnostikimi:</b> Test alergjie në lëkurë, analiza gjaku, vlerësim mjekësor.</p>
+    <p><b>Këshilla Për Pacientin:</b> Shmangni kontaktin me alergjenët, përdorni antihistaminikë sipas këshillës së mjekut, ventiloni dhomat rregullisht.</p>
+  </div>
+</div>
+
+<div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+  <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-brain"></i> Depresioni</div>
+  <div style="color:#92e7ff;margin-bottom:10px;">
+    <p><b>Çfarë është:</b> Depresioni është një çrregullim i gjendjes shpirtërore që shkakton trishtim të zgjatur, humbje interesi dhe lodhje.</p>
+    <p><b>Ankesat Kryesore:</b> Trishtim, mungesë energjie, çrregullime gjumi, mendime negative, humbje interesi.</p>
+    <p><b>Diagnostikimi:</b> Vlerësim psikologjik dhe psikiatrik, pyetësorë të veçantë.</p>
+    <p><b>Këshilla Për Pacientin:</b> Kërkoni ndihmë profesionale, flisni me të afërmit, ndiqni terapinë e përshkruar nga mjeku ose psikologu.</p>
+  </div>
+</div>
+
+<div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+  <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-disease"></i> Kanceri i Gjirit</div>
+  <div style="color:#92e7ff;margin-bottom:10px;">
+    <p><b>Çfarë është:</b> Kanceri i gjirit është një tumor malinj që zhvillohet në qelizat e gjirit, më i shpeshtë te femrat.</p>
+    <p><b>Ankesat Kryesore:</b> Gungë në gji, ndryshim në lëkurën e gjirit, rrjedhje nga thitha, dhimbje e lokalizuar.</p>
+    <p><b>Diagnostikimi:</b> Mamografi, ultratinguj, biopsi.</p>
+    <p><b>Këshilla Për Pacientin:</b> Kontrolloni rregullisht gjinjtë, bëni mamografi sipas rekomandimeve, ndiqni trajtimin sipas këshillës së mjekut.</p>
+  </div>
+</div>
+
+<div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+  <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-bone"></i> Osteoporoza</div>
+  <div style="color:#92e7ff;margin-bottom:10px;">
+    <p><b>Çfarë është:</b> Osteoporoza është dobësim i kockave, që i bën ato të brishta dhe të rrezikuara për fraktura.</p>
+    <p><b>Ankesat Kryesore:</b> Dhimbje kockash, fraktura të shpeshta, ulje e shtatit.</p>
+    <p><b>Diagnostikimi:</b> Densitometri kockore (DEXA), analizë gjaku për metabolizmin e kockave.</p>
+    <p><b>Këshilla Për Pacientin:</b> Rritni marrjen e kalciumit dhe vitaminës D, bëni aktivitet fizik, shmangni duhanin dhe alkoolin.</p>
+  </div>
+</div>
+
+<div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+  <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-allergies"></i> Dermatiti Atopik</div>
+  <div style="color:#92e7ff;margin-bottom:10px;">
+    <p><b>Çfarë është:</b> Dermatiti atopik është një sëmundje inflamatore e lëkurës, që shfaqet me kruarje, skuqje dhe tharje të lëkurës.</p>
+    <p><b>Ankesat Kryesore:</b> Skuqje, kruarje, lëkurë e thatë, plasaritje, infeksione sekondare.</p>
+    <p><b>Diagnostikimi:</b> Vlerësim klinik, ndonjëherë teste alergjie.</p>
+    <p><b>Këshilla Për Pacientin:</b> Përdorni kremra hidratuese, shmangni irrituesit, përdorni trajtime me bazë kortikosteroidesh sipas përshkrimit.</p>
+  </div>
+</div>
+
+<div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+  <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-syringe"></i> Gripi & Virozat</div>
+  <div style="color:#92e7ff;margin-bottom:10px;">
+    <p><b>Çfarë është:</b> Gripi është një infeksion viral i sistemit respirator, shumë i përhapur gjatë stinës së ftohtë.</p>
+    <p><b>Ankesat Kryesore:</b> Temperaturë, dhimbje fyti, dhimbje trupi, kollë, rrjedhje hundësh, lodhje.</p>
+    <p><b>Diagnostikimi:</b> Vlerësim klinik, ndonjëherë teste rapide virale.</p>
+    <p><b>Këshilla Për Pacientin:</b> Pushoni, pini shumë lëngje, përdorni antitermike. Kërkoni ndihmë nëse shenjat përkeqësohen.</p>
+  </div>
+</div>
+
+<div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+  <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-bacteria"></i> Infeksionet Urinare</div>
+  <div style="color:#92e7ff;margin-bottom:10px;">
+    <p><b>Çfarë është:</b> Infeksionet urinare janë infeksione të shkaktuara nga baktere në traktin urinar, më të shpeshta te gratë.</p>
+    <p><b>Ankesat Kryesore:</b> Djegie gjatë urinimit, urinim i shpeshtë, dhimbje të barkut të poshtëm, urinim me erë të keqe ose me gjak.</p>
+    <p><b>Diagnostikimi:</b> Analizë urine (urinokulturë), ekzaminim klinik.</p>
+    <p><b>Këshilla Për Pacientin:</b> Pini shumë ujë, mos shtyni urinimin, mbani higjienë të mirë intime, ndiqni trajtimin me antibiotikë vetëm me recetë mjeku.</p>
+  </div>
+</div>
+
+        
+        <div class="artikull-card" style="background:rgba(20,33,54,0.7);border-radius:15px;padding:20px;box-shadow:0 0 10px rgba(22,255,243,0.3);">
+          <div class="panel-title" style="font-size:1rem;margin-bottom:10px;"><i class="fas fa-allergies"></i> Alergjitë Stacionale</div>
+          <div style="color:#92e7ff;margin-bottom:10px;">
+            <p><b>Çfarë është:</b> Reaksione të tepruara të sistemit imunitar ndaj alergjenëve në mjedis si poleni, pluhuri ose kafshët shtëpiake.</p>
+            <p><b>Ankesat Kryesore:</b> Teshtitje, kruarje në sy, hundë të mbushur, rrjedhje nga hunda, urth.</p>
+            <p><b>Testet Diagnostikuese:</b> Teste alergjike në lëkurë ose në gjak për identifikimin e alergjenëve specifikë.</p>
+            <p><b>Këshilla Për Pacientin:</b> Shmangni ekspozimin ndaj alergjenëve, përdorni ilaçe antihistaminikë, konsideroni imunoterapi nëse nevojitet.</p>
+          </div>
+        </div>
+      </div>
+    </div>`,
+    
+    "symptom-checker": symptomCheckerPanel,
+    
+    dashboard: dashboardPanel,
+    
+    kartela: `<div class="panel-glass" style="max-width:650px;">
+      <div class="panel-title"><i class="fas fa-notes-medical"></i> Kartela Mjekësore</div>
+      <form id="kartelaForm" autocomplete="off">
+        <div class="form-grid-2col">
+          <div><label>Emri</label><input name="emri" required></div>
+          <div><label>Mbiemri</label><input name="mbiemri" required></div>
+          <div><label>Gjinia</label><select name="gjini"><option value="F">Femër</option><option value="M">Mashkull</option></select></div>
+          <div><label>Datëlindja</label><input type="date" name="datelindja" onchange="llogariteMoshaKartel()" required></div>
+          <div><label>Mosha</label><input name="mosha" readonly></div>
+          <div><label>Nr i regjistrit</label><input name="regjistri"></div>
+          <div><label>Telefoni</label><input name="telefoni" type="tel"></div>
+          <div><label>Email</label><input name="email" type="email"></div>
+          <div style="grid-column:1/3;"><label>Adresa</label><input name="adresa"></div>
+        </div>
+        
+        <div><label>Diagnoza kryesore</label><input name="diagnoza"></div>
+        <div><label>Diagnosa shoqëruese</label><input name="diagnozat_tjera"></div>
+        <div><label>Anamneza</label><textarea name="anamneza" rows="2"></textarea></div>
+        <div><label>Alergjitë</label><input name="alergji"></div>
+        <div><label>Vaksinat</label><input name="vaksinat"></div>
+        <div><label>Vizitat</label><input name="vizitat"></div>
+        <div><label>Analizat laboratorike</label><textarea name="analiza" rows="2"></textarea></div>
+        <div><label>Imazheria</label><input name="imazheria"></div>
+        <div><label>Medikamentet aktuale</label><textarea name="medikamentet" rows="2"></textarea></div>
+        <div><label>Shënime të mjekut</label><textarea name="shenime" rows="2"></textarea></div>
+        
+        <div class="mobile-btn-group">
+          <button class="btn" type="button" onclick="ruajKartelen()">Ruaj</button>
+          <button class="btn" type="button" onclick="printoKartelen()">Printo</button>
+          <button class="btn" type="button" onclick="krijoReceteNgaKartela()">Krijo recetë</button>
+        </div>
+        
+        <div id="kartelaResult" style="margin:10px 0 0 0;color:#16fff3;font-weight:600;"></div>
+      </form>
+    </div>`,
+    
+    lumenrx: `<div class="panel-glass" style="max-width:750px;">
+      <div class="panel-title"><i class="fas fa-prescription"></i> Lumen Rx — Recetë Elektronike</div>
+      <form id="lumenRxForm" autocomplete="off">
+        <div class="form-grid-3col">
+          <div><label>Emri</label><input name="emri" required></div>
+          <div><label>Mbiemri</label><input name="mbiemri" required></div>
+          <div><label>Datëlindja</label><input type="date" name="datelindja" onchange="calcLumenRxMosha()" required></div>
+          <div><label>Mosha</label><input name="mosha" readonly></div>
+          <div><label>Nr i regjistrit</label><input name="regjistri"></div>
+          <div><label>Diagnoza</label><input name="diagnoza"></div>
+        </div>
+        
+        <div style="color:#16fff3;font-weight:700;font-size:1.2rem;margin:20px 0 8px 0;">Rp:</div>
+        <div id="lumenRxDrugs"></div>
+        
+        <button class="btn" type="button" style="margin:12px 0 0 0;" onclick="addLumenRxRow()">Shto medikament</button>
+        
+        <div class="mobile-btn-group">
+          <button class="btn" type="button" onclick="saveLumenRx()">Ruaj</button>
+          <button class="btn" type="button" onclick="printLumenRx()">Printo</button>
+          <button class="btn" type="button" onclick="shareLumenRxPDF()">Share PDF</button>
+          <button class="btn" type="button" onclick="showLumenRxHistory()">Historik</button>
+        </div>
+        
+        <div id="lumenRxResult" style="margin:10px 0 0 0;color:#16fff3;font-weight:600;"></div>
+      </form>
+      
+      <div id="lumenRxHistory" style="display:none;margin-top:20px;"></div>
+    </div>`,
+    
+    axhenda: `<div class="panel-glass" style="max-width: 700px;">
+      <div class="panel-title"><i class="fas fa-calendar-alt"></i> Axhenda Mjekësore</div>
+      <form id="formAxhenda" onsubmit="event.preventDefault(); shtoTakim();">
+        <div class="form-grid-3col">
+          <div><label>Data</label><input type="date" name="data" required></div>
+          <div><label>Ora</label><input type="time" name="ora" required></div>
+          <div><label>Lloji</label><select name="lloji" required>
+            <option value="Fizike">Fizike</option>
+            <option value="Online">Online</option>
+            <option value="Telefon">Telefon</option>
+          </select></div>
+        </div>
+        
+        <div class="form-grid-2col">
+          <div><label>Pacienti</label><input type="text" name="pacienti" required></div>
+          <div><label>Arsyeja</label><input type="text" name="arsyeja" required></div>
+        </div>
+        
+        <button class="btn" type="submit" style="margin-top:15px;"><i class="fas fa-plus"></i> Shto takim</button>
+      </form>
+      
+      <div style="margin-top:20px;">
+        <label>Filtro sipas:</label>
+        <select id="filterAxhenda" onchange="renderAxhenda()" style="width:100%;margin-bottom:15px;">
+          <option value="all">Të gjitha</option>
+          <option value="today">Sot</option>
+          <option value="week">Këtë javë</option>
+          <option value="month">Këtë muaj</option>
+          <option value="Planifikuar">Planifikuar</option>
+          <option value="Përfunduar">Përfunduar</option>
+          <option value="Anuluar">Anuluar</option>
+        </select>
+      </div>
+      
+      <div id="tabelAxhenda" style="margin-top:15px;"></div>
+    </div>`,
+    
+    pacientet: `<div class="panel-glass" style="max-width:800px;">
+      <div class="panel-title"><i class="fas fa-users"></i> Pacientët</div>
+      <div style="margin-bottom:15px;">
+        <input type="text" id="searchPacientet" placeholder="Kërko pacient..." style="width:100%;" onkeyup="filterPacientet()">
+      </div>
+      <div class="scroll-x">
+        <table id="pacientetTable" style="min-width:600px;">
+          <thead>
+            <tr>
+              <th>Emri</th>
+              <th>Mbiemri</th>
+              <th>Mosha</th>
+              <th>Diagnoza</th>
+              <th>Vizita e fundit</th>
+              <th>Veprime</th>
+            </tr>
+          </thead>
+          <tbody id="pacientetList">
+            <!-- Lista e pacientëve do të mbushët me JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>`,
+    
+    hyr: ""
+  ,
+  kartela: `<div class="panel-glass" style="max-width:900px;margin:auto;">
+    <div class="panel-title"><i class="fas fa-notes-medical"></i> Kartela Mjekësore</div>
+    <div class="form-grid-2col">
+      <div><label>Emri</label><input id="emriPacientit" type="text"></div>
+      <div><label>Mbiemri</label><input id="mbiemriPacientit" type="text"></div>
+      <div><label>Datëlindja</label><input id="datelindjaPacientit" type="date"></div>
+      <div><label>Nr. Regjistri</label><input id="nrRegjistri" type="text"></div>
+    </div>
+    <label style="margin-top:15px;display:block;">Diagnoza aktuale</label>
+    <textarea id="diagnozaAktuale" rows="2"></textarea>
+    <label style="margin-top:15px;display:block;">Historik vizitash</label>
+    <textarea id="historikVizitash" rows="3"></textarea>
+    <label style="margin-top:15px;display:block;">Mjekime të marra</label>
+    <textarea id="mjekimetMarrura" rows="3"></textarea>
+    <label style="margin-top:15px;display:block;">Analiza laboratorike</label>
+    <textarea id="analizatLab" rows="3"></textarea>
+    <label style="margin-top:15px;display:block;">Ngarko imazheri (PDF/JPG)</label>
+    <input type="file" id="uploadFile" accept=".jpg,.jpeg,.png,.pdf">
+    <button class="btn" style="margin-top:20px;" onclick="ruajKartelen()">Ruaj Kartelën</button>
+  </div>`,
+
+  receta: `<div class="panel-glass" style="max-width:800px;margin:auto;">
+    <div class="panel-title"><i class="fas fa-prescription"></i> Recetë Mjekësore</div>
+    <label>Numri i regjistrit</label>
+    <input id="recetaRegjistri" placeholder="P.sh. 123456" onkeydown="if(event.key==='Enter') ngarkoTeDhenatPacientit()">
+    <label>Emër Mbiemër</label>
+    <input id="recetaEmer" disabled>
+    <label>Diagnoza</label>
+    <textarea id="recetaDiagnoza" rows="2"></textarea>
+    <label>Receta (RP)</label>
+    <table><thead><tr><th>#</th><th>Emri i ilaçit</th><th>Doza</th></tr></thead><tbody id="rpBody"></tbody></table>
+    <button class="btn" onclick="shtoRP()">+ Shto rresht</button>
+    <div style="margin-top:20px;display:flex;gap:10px;">
+      <button class="btn" onclick="ruajReceten()">Ruaj Recetën</button>
+      <button class="btn" onclick="printoReceten()">Printo</button>
+    </div>
+  </div>`,
+
+  axhenda: `<div class="panel-glass" style="max-width:900px;margin:auto;">
+    <div class="panel-title"><i class="fas fa-calendar-alt"></i> Axhenda Mjekësore</div>
+    <label style="margin-top:10px;">Zgjidh datën</label>
+    <input type="date" id="takimData">
+    <label>Ora</label>
+    <input type="time" id="takimOra">
+    <label>Emri i pacientit</label>
+    <input type="text" id="takimPacienti">
+    <label>Arsyeja</label>
+    <textarea id="takimArsyeja" rows="2"></textarea>
+    <button class="btn" style="margin-top:15px;" onclick="shtoTakim()">Shto Takim</button>
+    <div style="margin-top:25px;">
+      <div class="panel-title" style="font-size:1rem;"><i class="fas fa-list"></i> Takimet e Datuara</div>
+      <div id="listaTakimeve" style="margin-top:10px;"></div>
+    </div>
+  </div>`,
+
+  dokumente: `<div class="panel-glass" style="max-width:800px;margin:auto;">
+    <div class="panel-title"><i class="fas fa-file-medical"></i> Dokumente të Pacientit</div>
+    <label>Numri i regjistrit</label>
+    <input id="dokRegjistri" placeholder="P.sh. 123456">
+    <label>Zgjidh dokumentin</label>
+    <input type="file" id="dokFile" accept=".pdf,.jpg,.jpeg,.png">
+    <button class="btn" style="margin-top:10px;" onclick="ngarkoDokument()">Ngarko Dokumentin</button>
+    <div style="margin-top:25px;">
+      <div class="panel-title" style="font-size:1rem;"><i class="fas fa-folder-open"></i> Dokumentet e Ruajtura</div>
+      <div id="listaDokumenteve" style="margin-top:10px;"></div>
+    </div>
+  </div>`,
+
+  telemjekesia: `<div class="panel-glass" style="max-width:800px;margin:auto;">
+    <div class="panel-title"><i class="fas fa-video"></i> Telemjekësia</div>
+    <label>Numri i regjistrit</label>
+    <input id="telRegjistri" placeholder="P.sh. 123456">
+    <label>Emri i pacientit</label>
+    <input id="telEmer" type="text">
+    <label>Qëllimi i konsultës</label>
+    <textarea id="telQellimi" rows="2"></textarea>
+    <button class="btn" style="margin-top:15px;" onclick="nisThirrje()">Nis Videochat</button>
+    <div style="margin-top:30px;">
+      <div class="panel-title" style="font-size:1rem;"><i class="fas fa-history"></i> Historiku i Konsultave Online</div>
+      <div id="listaKonsultave" style="margin-top:10px;"></div>
+    </div>
+  </div>`,
+
+  admin: `<div class="panel-glass" style="max-width:800px;margin:auto;">
+    <div class="panel-title"><i class="fas fa-cogs"></i> Panel Admin</div>
+    <label>Medikament i ri</label>
+    <input id="adminMed" placeholder="P.sh. Paracetamol 500mg">
+    <button class="btn" onclick="shtoMedikament()">Shto</button>
+    <ul id="listaMedikamenteve"></ul>
+    <hr style="margin:20px 0;">
+    <label>Artikull i ri</label>
+    <input id="adminArt" placeholder="Titulli i artikullit">
+    <button class="btn" onclick="shtoArtikull()">Shto</button>
+    <ul id="listaArtikujve"></ul>
+  </div>`
+};
+
+  // Funksionet për autentifikim
+  function isLoggedIn() { return localStorage.getItem('dlumen_islog') === '1'; }
+  function setLoggedIn(val) { if(val) localStorage.setItem('dlumen_islog','1'); else localStorage.removeItem('dlumen_islog'); }
+  
+  function showModal() {
+    document.getElementById('modal-login').style.display = "flex";
+    document.getElementById('log_user').value = "";
+    document.getElementById('log_pass').value = "";
+    document.getElementById('loginError').textContent = "";
+    setTimeout(()=>{document.getElementById('log_user').focus();},100);
+  }
+  
+  function closeModal() {
+    document.getElementById('modal-login').style.display = "none";
+    document.getElementById('loginError').textContent = "";
+  }
+  
+  function doLogin() {
+    const user = document.getElementById('log_user').value.trim();
+    const pass = document.getElementById('log_pass').value.trim();
+    if(user.toUpperCase() === "LUMEN" && pass === "DOKTOR") {
+      setLoggedIn(true);
+      closeModal();
+      renderMenu();
+      loadPanel('dashboard');
+    } else {
+      document.getElementById('loginError').textContent = "Kredencialet gabim!";
+    }
+  }
+  
+  function logout() {
+    setLoggedIn(false);
+    renderMenu();
+    loadPanel('shtepia');
+  }
+
+  // Funksionet për menunë dhe panel-et
+  function renderMenu() {
+    const hudMenu = document.getElementById('hudMenu');
+    hudMenu.innerHTML = "";
+    let menuArr = isLoggedIn() ? MJEK_MENU : PUBLIC_MENU;
+    menuArr.forEach(obj=>{
+      const a = document.createElement('a');
+      a.href="#";
+      a.className = 'hud-link';
+      a.dataset.panel = obj.id;
+      a.innerHTML = `<i class="fas fa-${obj.icon}"></i> ${obj.label}`;
+      a.onclick = (e)=>{
+        e.preventDefault();
+        if (obj.id === "logout") { logout(); return; }
+        if (obj.id === "hyr") { showModal(); return; }
+        document.querySelectorAll('.hud-link').forEach(link => link.classList.remove('active'));
+        a.classList.add('active');
+        loadPanel(obj.id);
+      };
+      hudMenu.appendChild(a);
+    });
+  }
+  
+  function loadPanel(panel) {
+    mainSection.innerHTML = panels[panel] || panels.shtepia;
+    setTimeout(() => {
+        if(panel === "shtepia") homePanelFx();
+        if(panel === "axhenda") renderAxhenda();
+        if(panel === "kartela") loadKartela();
+        if(panel === "lumenrx") loadLumenRx();
+        if(panel === "kalkulatore") initKalkulatore();
+        if(panel === "pacientet") loadPacientet();
+        if(panel === "symptom-checker") initSymptomChecker();
+        if(panel === "dashboard") initDashboard();
+
+        document.querySelectorAll('.hud-link').forEach(link => link.classList.remove('active'));
+        const activeLink = document.querySelector(`.hud-link[data-panel="${panel}"]`);
+        if(activeLink) activeLink.classList.add('active');
+    }, 50);
+  }
+
+  // Funksionet për orën dhe kalendarin
+  function updateTime() {
+    const t = new Date();
+    const h = String(t.getHours()).padStart(2,'0');
+    const m = String(t.getMinutes()).padStart(2,'0');
+    const s = String(t.getSeconds()).padStart(2,'0');
+    document.getElementById('hudClock').textContent = `${h}:${m}:${s}`;
+  }
+  
+  setInterval(updateTime, 1000); 
+  updateTime();
+
+  function renderHomeCalendar(targetId) {
+    const el = document.getElementById(targetId);
+    if (!el) return;
+    const monthNames = ['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'];
+    let date = new Date();
+    let viewMonth = date.getMonth(), viewYear = date.getFullYear();
+    
+    function draw() {
+      el.innerHTML = '';
+      const head = document.createElement('div');
+      head.style.display = 'flex'; head.style.justifyContent = 'space-between'; head.style.alignItems = 'center';
+      head.style.marginBottom = '8px'; head.style.fontWeight = '700'; head.style.color = '#16fff3';
+      head.innerHTML = `
+        <span style="cursor:pointer" id="calPrev">&#x276E;</span>
+        <span>${monthNames[viewMonth]} ${viewYear}</span>
+        <span style="cursor:pointer" id="calNext">&#x276F;</span>
+      `;
+      el.appendChild(head);
+      
+      const days = ['H','M','M','E','P','S','D'];
+      const dow = document.createElement('div');
+      dow.style.display = 'grid'; dow.style.gridTemplateColumns = 'repeat(7,1fr)'; dow.style.textAlign = 'center';
+      dow.style.marginBottom = '5px';
+      dow.innerHTML = days.map(d=>`<span style="color:#47f7fe;font-size:0.96rem">${d}</span>`).join('');
+      el.appendChild(dow);
+      
+      const firstDay = (new Date(viewYear, viewMonth, 1).getDay() + 6) % 7;
+      const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+      const grid = document.createElement('div');
+      grid.style.display = 'grid'; grid.style.gridTemplateColumns = 'repeat(7,1fr)'; grid.style.gap = '3px';
+      
+      for (let i = 0; i < firstDay; i++) { grid.innerHTML += '<div></div>'; }
+      for (let d = 1; d <= daysInMonth; d++) {
+        const cell = document.createElement('div');
+        cell.style.padding = '4px 0';
+        cell.style.textAlign = 'center';
+        cell.style.fontSize = '0.95rem';
+        cell.textContent = d;
+        cell.style.cursor = 'pointer';
+        if (d===date.getDate() && viewMonth===date.getMonth() && viewYear===date.getFullYear()) {
+          cell.style.background = '#16fff3';
+          cell.style.color = '#0c151f';
+          cell.style.borderRadius = '6px';
+          cell.style.fontWeight = '700';
+        } else {
+          cell.style.color = '#cafdff';
+        }
+        grid.appendChild(cell);
+      }
+      el.appendChild(grid);
+      
+      document.getElementById('calPrev').onclick = ()=>{ viewMonth--; if(viewMonth<0){viewMonth=11;viewYear--;} draw(); }
+      document.getElementById('calNext').onclick = ()=>{ viewMonth++; if(viewMonth>11){viewMonth=0;viewYear++;} draw(); }
+    }
+    draw();
+  }
+  
+  function renderHomeAnalogClock(targetId) {
+    const container = document.getElementById(targetId);
+    if (!container) return;
+    container.innerHTML = '';
+    const c = document.createElement('canvas');
+    c.width = 120; c.height = 120;
+    c.style.display = 'block'; c.style.margin = 'auto';
+    container.appendChild(c);
+    const ctx = c.getContext('2d');
+    
+    function drawClock() {
+      ctx.clearRect(0,0,120,120);
+      ctx.save();
+      ctx.translate(60,60);
+      ctx.strokeStyle = "#16fff3"; ctx.lineWidth = 5;
+      ctx.shadowBlur = 20; ctx.shadowColor = "#16fff3";
+      ctx.beginPath(); ctx.arc(0,0,55,0,2*Math.PI); ctx.stroke();
+      ctx.shadowBlur = 0;
+      
+      for(let i=0;i<12;i++){
+        const ang = i*Math.PI/6;
+        ctx.beginPath();
+        ctx.arc(Math.cos(ang)*48, Math.sin(ang)*48, 4, 0, 2*Math.PI);
+        ctx.fillStyle="#16fff3"; ctx.globalAlpha = 0.55; ctx.fill();
+      }
+      
+      ctx.globalAlpha = 1;
+      const now = new Date();
+      
+      ctx.save();
+      ctx.rotate((now.getHours()%12)*Math.PI/6+now.getMinutes()*Math.PI/360 - Math.PI/2);
+      ctx.strokeStyle = "#16fff3"; ctx.lineWidth = 7;
+      ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(35,0); ctx.stroke(); ctx.restore();
+      
+      ctx.save();
+      ctx.rotate(now.getMinutes()*Math.PI/30 - Math.PI/2);
+      ctx.strokeStyle = "#47f7fe"; ctx.lineWidth = 5;
+      ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(45,0); ctx.stroke(); ctx.restore();
+      
+      ctx.save();
+      ctx.rotate(now.getSeconds()*Math.PI/30 - Math.PI/2);
+      ctx.strokeStyle = "#aaff00"; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(50,0); ctx.stroke(); ctx.restore();
+      
+      ctx.beginPath(); ctx.arc(0,0,8,0,2*Math.PI); ctx.fillStyle="#16fff3"; ctx.fill();
+      ctx.restore();
+    }
+    setInterval(drawClock, 1000); drawClock();
+  }
+  
+  function homePanelFx() {
+    renderHomeCalendar('homeCalendar');
+    renderHomeAnalogClock('homeAnalogClock');
+  }
+
+  // Funksionet për Symptom Checker
+  function initSymptomChecker() {
+    renderSymptomCategories();
+    setupSymptomSearch();
+  }
+  
+  function renderSymptomCategories() {
+    // Simptomat e përgjithshme
+    const generalDiv = document.getElementById('generalSymptoms');
+    generalDiv.innerHTML = SYMPTOMS.general.map(symptom => `
+      <div class="symptom-item">
+        <input type="checkbox" id="sym-${symptom.id}" name="symptom" value="${symptom.id}">
+        <label for="sym-${symptom.id}"><i class="fas fa-${symptom.icon}"></i> ${symptom.name}</label>
+        <div class="symptom-severity" style="display:none;">
+          <select id="sev-${symptom.id}">
+            <option value="mild">I lehtë</option>
+            <option value="moderate">I moderuar</option>
+            <option value="severe">I rëndë</option>
+          </select>
+        </div>
+      </div>
+    `).join('');
+    
+    // Simptomat respiratore
+    const respiratoryDiv = document.getElementById('respiratorySymptoms');
+    respiratoryDiv.innerHTML = SYMPTOMS.respiratory.map(symptom => `
+      <div class="symptom-item">
+        <input type="checkbox" id="sym-${symptom.id}" name="symptom" value="${symptom.id}">
+        <label for="sym-${symptom.id}"><i class="fas fa-${symptom.icon}"></i> ${symptom.name}</label>
+        <div class="symptom-severity" style="display:none;">
+          <select id="sev-${symptom.id}">
+            <option value="mild">I lehtë</option>
+            <option value="moderate">I moderuar</option>
+            <option value="severe">I rëndë</option>
+          </select>
+        </div>
+      </div>
+    `).join('');
+    
+    // Simptomat gastrointestinale
+    const giDiv = document.getElementById('giSymptoms');
+    giDiv.innerHTML = SYMPTOMS.gastrointestinal.map(symptom => `
+      <div class="symptom-item">
+        <input type="checkbox" id="sym-${symptom.id}" name="symptom" value="${symptom.id}">
+        <label for="sym-${symptom.id}"><i class="fas fa-${symptom.icon}"></i> ${symptom.name}</label>
+        <div class="symptom-severity" style="display:none;">
+          <select id="sev-${symptom.id}">
+            <option value="mild">I lehtë</option>
+            <option value="moderate">I moderuar</option>
+            <option value="severe">I rëndë</option>
+          </select>
+        </div>
+      </div>
+    `).join('');
+    
+    // Simptomat neurologjike
+    const neuroDiv = document.getElementById('neuroSymptoms');
+    neuroDiv.innerHTML = SYMPTOMS.neurological.map(symptom => `
+      <div class="symptom-item">
+        <input type="checkbox" id="sym-${symptom.id}" name="symptom" value="${symptom.id}">
+        <label for="sym-${symptom.id}"><i class="fas fa-${symptom.icon}"></i> ${symptom.name}</label>
+        <div class="symptom-severity" style="display:none;">
+          <select id="sev-${symptom.id}">
+            <option value="mild">I lehtë</option>
+            <option value="moderate">I moderuar</option>
+            <option value="severe">I rëndë</option>
+          </select>
+        </div>
+      </div>
+    `).join('');
+    
+    // Shtojmë event listeners për të shfaqur severity kur zgjidhet një simptomë
+    document.querySelectorAll('input[name="symptom"]').forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        const severityDiv = this.parentElement.querySelector('.symptom-severity');
+        if (this.checked) {
+          severityDiv.style.display = 'block';
+        } else {
+          severityDiv.style.display = 'none';
+        }
+      });
+    });
+  }
+  
+  function setupSymptomSearch() {
+    const searchInput = document.getElementById('symptomSearch');
+    searchInput.addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      
+      document.querySelectorAll('.symptom-item').forEach(item => {
+        const label = item.querySelector('label').textContent.toLowerCase();
+        if (label.includes(searchTerm)) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  }
+  
+  function checkSymptoms() {
+    const resultDiv = document.getElementById('symptomCheckerResult');
+    const checkedSymptoms = Array.from(document.querySelectorAll('input[name="symptom"]:checked')).map(el => el.value);
+    
+    if (checkedSymptoms.length === 0) {
+      resultDiv.innerHTML = `<p style="color:#ff5555;font-weight:600;">Zgjidhni të paktën një simptomë.</p>`;
+      document.getElementById('symptomSeverity').style.display = 'none';
+      document.getElementById('recommendedActions').style.display = 'none';
+      return;
+    }
+    
+    // Gjej kushtet mjekësore që përputhen me simptomat e zgjedhura
+    const matchedConditions = MEDICAL_CONDITIONS.map(condition => {
+      const matchingSymptoms = condition.symptoms.filter(symptom => 
+        checkedSymptoms.includes(symptom)
+      ).length;
+      
+      const matchPercentage = Math.round((matchingSymptoms / condition.symptoms.length) * 100);
+      
+      return {
+        ...condition,
+        matchPercentage: matchPercentage,
+        matchingSymptoms: matchingSymptoms
+      };
+    })
+    .filter(condition => condition.matchPercentage >= 50)
+    .sort((a, b) => b.matchPercentage - a.matchPercentage);
+    
+    if (matchedConditions.length === 0) {
+      resultDiv.innerHTML = `<p style="color:#fffae6;">Nuk u gjetën kushte mjekësore që përputhen me simptomat tuaja. Konsultohuni me mjekun tuaj për një vlerësim më të plotë.</p>`;
+      document.getElementById('symptomSeverity').style.display = 'none';
+      document.getElementById('recommendedActions').style.display = 'none';
+      return;
+    }
+    
+    // Shfaq kushtet e mundshme
+    let html = '<p style="color:#aaff00;">Bazuar në simptomat tuaja, këto janë kushtet mjekësore më të mundshme:</p>';
+    
+    matchedConditions.forEach(condition => {
+      html += `
+        <div class="possible-condition">
+          <div class="condition-title">
+            ${condition.name}
+            <span class="condition-probability">${condition.matchPercentage}% përputhje</span>
+          </div>
+          <div class="condition-description">${condition.description}</div>
+          <div class="condition-actions">
+            <button class="btn" onclick="showConditionDetails('${condition.name}')" style="background:#16fff3;color:#032524;">
+              <i class="fas fa-info-circle"></i> Detaje
+            </button>
+            <button class="btn" onclick="showTreatmentForCondition('${condition.name}')" style="background:#aaff00;color:#032524;">
+              <i class="fas fa-prescription"></i> Trajtimi
+            </button>
+          </div>
+        </div>
+      `;
+    });
+    
+    resultDiv.innerHTML = html;
+    
+    // Vlerëso rrezikun e përgjithshëm
+    assessSeverity(checkedSymptoms);
+  }
+  
+  function assessSeverity(symptoms) {
+    const severityDiv = document.getElementById('severityResult');
+    const actionsDiv = document.getElementById('actionsList');
+    
+    // Kontrollo për simptoma urgjente
+    const urgentSymptoms = ['frymemarrje', 'humbje_vetedije', 'dhimbje_gjoks'];
+    const hasUrgentSymptoms = symptoms.some(symptom => urgentSymptoms.includes(symptom));
+    
+    if (hasUrgentSymptoms) {
+      severityDiv.innerHTML = `
+        <div style="color:#ff5555;font-weight:600;padding:10px;background:rgba(255,85,85,0.1);border-radius:10px;">
+          <i class="fas fa-exclamation-triangle"></i> Rrezik i lartë! Ju lutem kërkoni ndihmë mjekësore menjëherë.
+        </div>
+      `;
+      
+      actionsDiv.innerHTML = `
+        <ul style="color:#ff5555;padding-left:20px;">
+          <li>Kontaktoni mjekun tuaj menjëherë ose shkoni në departamentin e urgjencës</li>
+          <li>Mos pritoni që simptomat të përkeqësohen</li>
+          <li>Nëse keni vështirësi të rënda në frymëmarrje, thirrni ambulancën</li>
+        </ul>
+      `;
+    } else {
+      // Kontrollo për simptoma të moderuara
+      const moderateSymptoms = ['ethe', 'dhimbje_koke', 'vjellje', 'diarre'];
+      const hasModerateSymptoms = symptoms.some(symptom => moderateSymptoms.includes(symptom));
+      
+      if (hasModerateSymptoms) {
+        severityDiv.innerHTML = `
+          <div style="color:#ffe686;font-weight:600;padding:10px;background:rgba(255,230,134,0.1);border-radius:10px;">
+            <i class="fas fa-exclamation-circle"></i> Rrezik i moderuar. Këshillohet të konsultoheni me mjekun brenda 24 orësh.
+          </div>
+        `;
+        
+        actionsDiv.innerHTML = `
+          <ul style="color:#ffe686;padding-left:20px;">
+            <li>Kontaktoni mjekun tuaj brenda 24 orësh</li>
+            <li>Pushoni dhe hidratohuni mirë</li>
+            <li>Përdorni ilaçe pa recetë vetëm për të lehtësuar simptomat</li>
+            <li>Nëse simptomat përkeqësohen, kërkoni ndihmë mjekësore menjëherë</li>
+          </ul>
+        `;
+      } else {
+        // Simptoma të lehta
+        severityDiv.innerHTML = `
+          <div style="color:#aaff00;font-weight:600;padding:10px;background:rgba(170,255,0,0.1);border-radius:10px;">
+            <i class="fas fa-check-circle"></i> Rrezik i ulët. Mund të monitoroni simptomat në shtëpi.
+          </div>
+        `;
+        
+        actionsDiv.innerHTML = `
+          <ul style="color:#aaff00;padding-left:20px;">
+            <li>Pushoni dhe hidratohuni mirë</li>
+            <li>Përdorni ilaçe pa recetë për të lehtësuar simptomat nëse është e nevojshme</li>
+            <li>Nëse simptomat zgjasin më shumë se 3 ditë ose përkeqësohen, konsultohuni me mjekun</li>
+          </ul>
+        `;
+      }
+    }
+    
+    document.getElementById('symptomSeverity').style.display = 'block';
+    document.getElementById('recommendedActions').style.display = 'block';
+  }
+  
+  function showConditionDetails(conditionName) {
+    const condition = MEDICAL_CONDITIONS.find(c => c.name === conditionName);
+    if (!condition) return;
+    
+    const resultDiv = document.getElementById('symptomCheckerResult');
+    resultDiv.innerHTML = `
+      <div class="possible-condition">
+        <div class="condition-title">
+          ${condition.name}
+          <button class="btn" onclick="checkSymptoms()" style="background:#2a3b50;color:#16fff3;float:right;padding:5px 10px;font-size:0.8rem;">
+            <i class="fas fa-arrow-left"></i> Kthehu
+          </button>
+        </div>
+        <div class="condition-description">
+          <p><b>Përshkrim:</b> ${condition.description}</p>
+          <p><b>Simptomat tipike:</b> ${condition.symptoms.map(s => SYMPTOMS.general.concat(SYMPTOMS.respiratory, SYMPTOMS.gastrointestinal, SYMPTOMS.neurological)
+            .find(x => x.id === s)?.name || s).join(', ')}</p>
+          <p><b>Rrezikshmëria:</b> ${condition.severity === 'high' ? 'E lartë' : condition.severity === 'moderate' ? 'E moderuar' : 'E ulët'}</p>
+        </div>
+        <div class="condition-actions">
+          <button class="btn" onclick="showTreatmentForCondition('${condition.name}')" style="background:#aaff00;color:#032524;">
+            <i class="fas fa-prescription"></i> Shiko trajtimin
+          </button>
+        </div>
+      </div>
+    `;
+  }
+  
+  function showTreatmentForCondition(conditionName) {
+    const condition = MEDICAL_CONDITIONS.find(c => c.name === conditionName);
+    if (!condition) return;
+    
+    const resultDiv = document.getElementById('symptomCheckerResult');
+    resultDiv.innerHTML = `
+      <div class="possible-condition">
+        <div class="condition-title">
+          Trajtimi për ${condition.name}
+          <button class="btn" onclick="checkSymptoms()" style="background:#2a3b50;color:#16fff3;float:right;padding:5px 10px;font-size:0.8rem;">
+            <i class="fas fa-arrow-left"></i> Kthehu
+          </button>
+        </div>
+        <div class="condition-description">
+          <p><b>Trajtimi i rekomanduar:</b></p>
+          <p>${condition.treatment}</p>
+          
+          ${condition.name === 'Grip' ? `
+            <p style="margin-top:10px;"><b>Medikamente të rekomanduara:</b></p>
+            <ul style="padding-left:20px;">
+              <li>Paracetamol për ethe dhe dhimbje</li>
+              <li>Ibuprofen për inflamacion</li>
+              <li>Antihistaminikë për të thatë hundën</li>
+            </ul>
+          ` : ''}
+          
+          ${condition.name === 'Gastroenterit' ? `
+            <p style="margin-top:10px;"><b>Këshilla për trajtimin në shtëpi:</b></p>
+            <ul style="padding-left:20px;">
+              <li>Pini shumë lëngje (ujë, çaj, supë)</li>
+              <li>Hani ushqime të lehta si banane, oriz, mollë dhe bukë të thatë</li>
+              <li>Shmangni produktet e qumështit dhe ushqimet e yndyrshme</li>
+              <li>Përdorni elektrolitë nëse keni diarre të rëndë</li>
+            </ul>
+          ` : ''}
+        </div>
+        <div class="condition-actions">
+          <button class="btn" onclick="loadPanel('medikamente')" style="background:#16fff3;color:#032524;">
+            <i class="fas fa-pills"></i> Shiko medikamentet
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  // Funksionet për medikamentet
+  function filterMedikamente() {
+    const searchVal = document.getElementById('searchInput').value.toLowerCase();
+    const filterVal = document.getElementById('filterSelect').value;
+    const rows = document.getElementById('medikamenteTable').querySelectorAll('tbody tr');
+    let found = false;
+    
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        const kategori = row.getAttribute('data-kategori');
+        if ((text.includes(searchVal) || searchVal === '') && (kategori === filterVal || filterVal === '')) {
+            row.style.display = '';
+            found = true;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+    
+    if(!found) {
+        if(!document.getElementById('noResults')) {
+            const noResultsRow = document.createElement('tr');
+            noResultsRow.id = 'noResults';
+            noResultsRow.innerHTML = `<td colspan="4" style="text-align:center;color:#ff5555;">Nuk u gjet asnjë medikament.</td>`;
+            document.getElementById('medikamenteTable').querySelector('tbody').appendChild(noResultsRow);
+        }
+    } else {
+        const noResultsRow = document.getElementById('noResults');
+        if(noResultsRow) noResultsRow.remove();
+    }
+  }
+
+  // Funksionet për kalkulatorët mjekësorë
+  function llogaritBMI() {
+    const pesha = parseFloat(document.getElementById('bmiPesha').value);
+    const gjatesia = parseFloat(document.getElementById('bmiGjatesia').value) / 100;
+    const resultDiv = document.getElementById('bmiRezultati');
+    
+    if (isNaN(pesha) || isNaN(gjatesia) || pesha <= 0 || gjatesia <= 0) {
+        resultDiv.innerHTML = "<span style='color:#ff5555;'>Ju lutem plotësoni vlerat e sakta.</span>";
+        return;
+    }
+    
+    const bmi = pesha / (gjatesia * gjatesia);
+    let status;
+    let advice;
+    
+    if (bmi < 18.5) { 
+      status = "Nënpeshë"; 
+      advice = "Këshillohet të rrisni peshën në mënyrë të shëndetshme përmes dietës dhe ushtrimeve.";
+    }
+    else if (bmi >= 18.5 && bmi < 24.9) { 
+      status = "Peshe normale"; 
+      advice = "Peshë e shëndetshme. Vazhdoni me dietën dhe stilin e jetesës aktuale.";
+    }
+    else if (bmi >= 25 && bmi < 29.9) { 
+      status = "Mbi peshë"; 
+      advice = "Këshillohet humbje e lehtë e peshës përmes dietës dhe ushtrimeve.";
+    }
+    else { 
+      status = "Obez"; 
+      advice = "Këshillohet humbje e peshës nën mbikëqyrjen e mjekut. Konsultohuni me specialist.";
+    }
+    
+    resultDiv.innerHTML = `
+      <p style="color:#aaff00;">BMI juaj është: <b>${bmi.toFixed(2)}</b></p>
+      <p style="color:#16fff3;">Statusi: <b>${status}</b></p>
+      <p style="color:#92e7ff;font-size:0.9rem;margin-top:8px;">${advice}</p>
+    `;
+  }
+  
+  function llogaritDozenParacetamol() {
+    const pesha = parseFloat(document.getElementById('dozaPesha').value);
+    const resultDiv = document.getElementById('dozaParacetamolRezultati');
+    
+    if (isNaN(pesha) || pesha <= 0) {
+        resultDiv.innerHTML = "<span style='color:#ff5555;'>Ju lutem plotësoni peshën e fëmijës.</span>";
+        return;
+    }
+    
+    const dozaTotale = pesha * 15;
+    const dozaPerDoze = Math.min(dozaTotale, 500); // Maksimumi 500mg për dozë
+    const numriDozave = Math.ceil(dozaTotale / dozaPerDoze);
+    
+    resultDiv.innerHTML = `
+      <p style="color:#aaff00;">Doza e Paracetamolit: <b>${dozaTotale.toFixed(0)} mg në ditë</b></p>
+      <p style="color:#16fff3;">Dozimi i rekomanduar: <b>${dozaPerDoze}mg çdo 6 orë (${numriDozave} doza në ditë)</b></p>
+      <p style="color:#ff5555;font-size:0.9rem;">Vërejtje: Mos e kaloni 4g (4000mg) në 24 orë. Konsultohuni me mjekun nëse simptomat zgjasin më shumë se 3 ditë.</p>
+    `;
+  }
+  
+  function llogaritDozenCefa() {
+    const pesha = parseFloat(document.getElementById('dozaCefaPesha').value);
+    const resultDiv = document.getElementById('dozaCefaRezultati');
+    
+    if (isNaN(pesha) || pesha <= 0) {
+        resultDiv.innerHTML = "<span style='color:#ff5555;'>Ju lutem plotësoni peshën e fëmijës.</span>";
+        return;
+    }
+    
+    const dozaMin = pesha * 25;
+    const dozaMax = pesha * 50;
+    const dozaEpergjithshme = `${dozaMin.toFixed(0)} mg - ${dozaMax.toFixed(0)} mg në ditë.`;
+    
+    resultDiv.innerHTML = `
+      <p style="color:#aaff00;">Doza ditore e rekomanduar: <b>${dozaEpergjithshme}</b></p>
+      <p style="color:#16fff3;">Kjo dozë ndahet në 2-4 doza gjatë ditës. P.sh., ${Math.round(dozaMax/3)}mg çdo 8 orë.</p>
+      <p style="color:#ff5555;font-size:0.9rem;">Vërejtje: Doza e saktë varet nga lloji i infeksionit dhe rekomandimet e mjekut. Mos e përdorni pa konsultim mjekësor.</p>
+    `;
+  }
+  
+  function llogaritDozenHeparina() {
+    const pesha = parseFloat(document.getElementById('dozaHeparinaPesha').value);
+    const resultDiv = document.getElementById('dozaHeparinaRezultati');
+    
+    if (isNaN(pesha) || pesha <= 0) {
+        resultDiv.innerHTML = "<span style='color:#ff5555;'>Ju lutem plotësoni peshën e pacientit.</span>";
+        return;
+    }
+    
+    const dozaFillestare = pesha * 80;
+    const dozaVazhdimtare = pesha * 18;
+    
+    resultDiv.innerHTML = `
+      <p style="color:#aaff00;">Doza fillestare: <b>${dozaFillestare.toFixed(0)} IU</b> (një herë)</p>
+      <p style="color:#16fff3;">Doza vazhdimtare: <b>${dozaVazhdimtare.toFixed(0)} IU/orë</b></p>
+      <p style="color:#ff5555;font-size:0.9rem;">Kujdes: Kjo është vetëm një udhëzim i përgjithshëm. Doza duhet të rregullohet sipas APTT dhe udhëzimeve të mjekut.</p>
+    `;
+  }
+  
+  function llogaritGFR() {
+    const mosha = parseFloat(document.getElementById('gfrMosha').value);
+    const gjinia = document.getElementById('gfrGjinia').value;
+    const kreatinina = parseFloat(document.getElementById('gfrKreatinina').value);
+    const resultDiv = document.getElementById('gfrRezultati');
+    
+    if (isNaN(mosha) || isNaN(kreatinina) || mosha <= 0 || kreatinina <= 0) {
+        resultDiv.innerHTML = "<span style='color:#ff5555;'>Ju lutem plotësoni vlerat e sakta.</span>";
+        return;
+    }
+    
+    let gfr;
+    if (gjinia === "M") {
+      gfr = 141 * Math.pow(Math.min(kreatinina/0.9, 1), -0.411) * Math.pow(Math.max(kreatinina/0.9, 1), -1.209) * Math.pow(0.993, mosha);
+    } else {
+      gfr = 141 * Math.pow(Math.min(kreatinina/0.7, 1), -0.329) * Math.pow(Math.max(kreatinina/0.7, 1), -1.209) * Math.pow(0.993, mosha) * 1.018;
+    }
+    
+    let status;
+    let advice;
+    if (gfr >= 90) { 
+      status = "Funksion normal"; 
+      advice = "Funksioni i veshkave është normal. Vazhdoni me stilin e jetesës shëndetshme.";
+    }
+    else if (gfr >= 60 && gfr < 90) { 
+      status = "Redaktim i lehtë"; 
+      advice = "Funksioni i veshkave është pak i reduktuar. Monitoroni dhe konsultohuni me mjekun nëse keni simptoma.";
+    }
+    else if (gfr >= 30 && gfr < 60) { 
+      status = "Redaktim i moderuar"; 
+      advice = "Funksioni i veshkave është i reduktuar. Këshillohet konsultim me nefrolog.";
+    }
+    else if (gfr >= 15 && gfr < 30) { 
+      status = "Redaktim i rëndë"; 
+      advice = "Funksioni i veshkave është shumë i reduktuar. Kërkohet trajtim specializuar.";
+    }
+    else { 
+      status = "Dështim i veshkave"; 
+      advice = "Kërkohet dializë ose transplant veshkash. Konsultohuni menjëherë me specialist.";
+    }
+    
+    resultDiv.innerHTML = `
+      <p style="color:#aaff00;">eGFR: <b>${gfr.toFixed(2)} mL/min/1.73m²</b></p>
+      <p style="color:#16fff3;">Statusi: <b>${status}</b></p>
+      <p style="color:#92e7ff;font-size:0.9rem;margin-top:8px;">${advice}</p>
+    `;
+  }
+  
+  function llogaritRrezikKardio() {
+    const mosha = parseInt(document.getElementById('cardioAge').value);
+    const gjinia = document.getElementById('cardioGender').value;
+    const sbp = parseInt(document.getElementById('cardioSBP').value);
+    const chol = parseInt(document.getElementById('cardioChol').value);
+    const hdl = parseInt(document.getElementById('cardioHDL').value);
+    const smoker = document.getElementById('cardioSmoker').value === '1';
+    const resultDiv = document.getElementById('cardioResult');
+    
+    if (isNaN(mosha) || isNaN(sbp) || isNaN(chol) || isNaN(hdl)) {
+        resultDiv.innerHTML = "<span style='color:#ff5555;'>Ju lutem plotësoni të gjitha vlerat.</span>";
+        return;
+    }
+    
+    // Llogaritja e thjeshtë e rrezikut kardiovaskular (version i thjeshtëzuar)
+    let score = 0;
+    
+    // Mosha
+    if (mosha >= 60) score += 8;
+    else if (mosha >= 50) score += 5;
+    else if (mosha >= 40) score += 3;
+    
+    // Gjinia (meshujt kanë rrezik më të lartë)
+    if (gjinia === 'M') score += 3;
+    
+    // Tensioni
+    if (sbp >= 160) score += 8;
+    else if (sbp >= 140) score += 5;
+    else if (sbp >= 120) score += 2;
+    
+    // Kolesterol total
+    if (chol >= 240) score += 6;
+    else if (chol >= 200) score += 3;
+    
+    // Kolesterol HDL
+    if (hdl < 40) score += 4;
+    else if (hdl < 60) score += 2;
+    
+    // Duhanpirja
+    if (smoker) score += 4;
+    
+    // Përqindja e rrezikut (thjeshtëzuar)
+    let riskPercent;
+    if (score >= 20) riskPercent = ">20% (Shumë i lartë)";
+    else if (score >= 15) riskPercent = "15-20% (I lartë)";
+    else if (score >= 10) riskPercent = "10-15% (Pak i lartë)";
+    else if (score >= 5) riskPercent = "5-10% (Mesatar)";
+    else riskPercent = "<5% (I ulët)";
+    
+    let advice;
+    if (score >= 15) {
+      advice = "Këshillohet konsultim urgjent me kardiolog. Ndryshimet në stilin e jetesës dhe trajtimi farmakologjik janë të domosdoshme.";
+    } else if (score >= 10) {
+      advice = "Këshillohet konsultim me mjekun tuaj. Ndryshimet në stilin e jetesës mund të reduktojnë rrezikun.";
+    } else {
+      advice = "Rreziku juaj është relativisht i ulët. Vazhdoni me stilin e jetesës shëndetshme.";
+    }
+    
+    resultDiv.innerHTML = `
+      <p style="color:#aaff00;">Rreziku kardiovaskular në 10 vjet: <b>${riskPercent}</b></p>
+      <p style="color:#16fff3;">Rezultati juaj: <b>${score} pikë</b></p>
+      <p style="color:#92e7ff;font-size:0.9rem;margin-top:8px;">${advice}</p>
+    `;
+  }
+  
+  function initKalkulatore() {
+    document.getElementById('bmiPesha').value = '';
+    document.getElementById('bmiGjatesia').value = '';
+    document.getElementById('bmiRezultati').innerHTML = '';
+    document.getElementById('dozaPesha').value = '';
+    document.getElementById('dozaParacetamolRezultati').innerHTML = '';
+    document.getElementById('dozaCefaPesha').value = '';
+    document.getElementById('dozaCefaRezultati').innerHTML = '';
+    document.getElementById('dozaHeparinaPesha').value = '';
+    document.getElementById('dozaHeparinaRezultati').innerHTML = '';
+    document.getElementById('gfrMosha').value = '';
+    document.getElementById('gfrKreatinina').value = '';
+    document.getElementById('gfrRezultati').innerHTML = '';
+    document.getElementById('cardioAge').value = '';
+    document.getElementById('cardioSBP').value = '';
+    document.getElementById('cardioChol').value = '';
+    document.getElementById('cardioHDL').value = '';
+    document.getElementById('cardioResult').innerHTML = '';
+  }
+
+  // Funksionet për kartelën mjekësore
+  function llogariteMosha(dateStr) {
+    if (!dateStr) return "";
+    const datelindja = new Date(dateStr);
+    const sot = new Date();
+    let mosha = sot.getFullYear() - datelindja.getFullYear();
+    if (sot.getMonth() < datelindja.getMonth() || (sot.getMonth() === datelindja.getMonth() && sot.getDate() < datelindja.getDate())) {
+        mosha--;
+    }
+    return mosha > 0 ? mosha + " vjeç" : "";
+  }
+  
+  function llogariteMoshaKartel() {
+    const f = document.forms.kartelaForm;
+    if (f) f.mosha.value = llogariteMosha(f.datelindja.value);
+  }
+  
+  function ruajKartelen() {
+    const f = document.forms.kartelaForm;
+    if (!f) return;
+    const data = {};
+    const elements = f.querySelectorAll('[name]');
+    elements.forEach(el => data[el.name] = el.value);
+    localStorage.setItem('dlumen_kartela', JSON.stringify(data));
+    document.getElementById('kartelaResult').innerHTML = "<span style='color:#aaff00;'>Kartela u ruajt me sukses!</span>";
+    setTimeout(() => document.getElementById('kartelaResult').innerHTML = "", 3000);
+  }
+  
+  function loadKartela() {
+    llogariteMoshaKartel();
+    const savedData = JSON.parse(localStorage.getItem('dlumen_kartela'));
+    if (savedData) {
+      const f = document.forms.kartelaForm;
+      const elements = f.querySelectorAll('[name]');
+      elements.forEach(el => {
+        if (savedData[el.name]) el.value = savedData[el.name];
+      });
+      llogariteMoshaKartel();
+    }
+  }
+  
+  function printoKartelen() {
+    const f = document.forms.kartelaForm;
+    let html = `<div style="font-family:'Poppins',sans-serif;max-width:700px;margin:auto;padding:20px;background:#17212e;color:#e8fdff;">
+      <h2 style="text-align:center;color:#16fff3;border-bottom:1px solid #16fff3;padding-bottom:10px;">Kartelë Mjekësore</h2>
+      <div style="margin-top:20px;">`;
+    
+    const labels = Array.from(f.querySelectorAll('label')).map(label => label.textContent);
+    const inputs = Array.from(f.querySelectorAll('input, select, textarea'));
+    
+    labels.forEach((label, i) => {
+      if (inputs[i] && inputs[i].value) {
+        html += `<p><b>${label}:</b> ${inputs[i].value}</p>`;
+      }
+    });
+    
+    html += `</div></div>`;
+    
+    let win = window.open('', '', 'width=900,height=700');
+    win.document.write('<html><head><title>Kartela Mjekësore</title></head><body>'+html+'</body></html>');
+    win.document.close();
+    win.print();
+  }
+  
+  function krijoReceteNgaKartela() {
+    const kf = document.forms.kartelaForm;
+    if (!kf) return;
+    ruajKartelen();
+    loadPanel('lumenrx');
+    setTimeout(()=>{
+      const lf = document.forms.lumenRxForm;
+      if (lf) {
+        lf.emri.value = kf.emri.value;
+        lf.mbiemri.value = kf.mbiemri.value;
+        lf.datelindja.value = kf.datelindja.value;
+        lf.regjistri.value = kf.regjistri.value;
+        lf.diagnoza.value = kf.diagnoza.value;
+        calcLumenRxMosha();
+      }
+    }, 100);
+  }
+
+  // Funksionet për Lumen Rx (recetat elektronike)
+  let lumenRxRows = [];
+  let lumenRxHistory = [];
+  
+  function renderLumenRxRows() {
+    const el = document.getElementById('lumenRxDrugs');
+    if(!el) return;
+    el.innerHTML = '';
+    if(!lumenRxRows.length) { lumenRxRows.push({ilac:'',doza:'',dtd:'',shenime:''}); }
+    
+    lumenRxRows.forEach((row,i)=>{
+      el.innerHTML += `
+      <div style="display:grid;grid-template-columns:2.4fr 1.1fr 0.8fr 2.1fr 0.5fr;gap:10px;margin-bottom:10px;align-items:center;">
+        <div style="position:relative;">
+          <input placeholder="Emri i ilacit" value="${row.ilac||''}" oninput="lumenRxRows[${i}].ilac=this.value; showAutocomplete(this, ${i})" data-index="${i}">
+        </div>
+        <input placeholder="Doza" value="${row.doza||''}" oninput="lumenRxRows[${i}].doza=this.value">
+        <input placeholder="D.t.d" value="${row.dtd||''}" oninput="lumenRxRows[${i}].dtd=this.value">
+        <input placeholder="Shënime" value="${row.shenime||''}" oninput="lumenRxRows[${i}].shenime=this.value">
+        <button type="button" onclick="if(lumenRxRows.length > 1) { lumenRxRows.splice(${i},1); renderLumenRxRows(); }" style="background:#d9534f;color:#fff;border:none;border-radius:7px;padding:8px 10px;cursor:pointer;"><i class="fas fa-trash"></i></button>
+      </div>`;
+    });
+    
+    // Rreth inputit të medikamentit shtohet div-i i autocomplete
+    document.querySelectorAll('#lumenRxDrugs div input[placeholder="Emri i ilacit"]').forEach(input => {
+      const parent = input.parentElement;
+      const acList = document.createElement('div');
+      acList.className = 'autocomplete-list';
+      acList.style.display = 'none';
+      parent.appendChild(acList);
+    });
+  }
+  
+  function showAutocomplete(input, index) {
+    const parent = input.parentElement;
+    const acList = parent.querySelector('.autocomplete-list');
+    const val = input.value.toLowerCase();
+    acList.innerHTML = '';
+    acList.style.display = val ? 'block' : 'none';
+    
+    const filtered = MEDIKAMENTE_AUTOCOMPLETE.filter(m => m.toLowerCase().includes(val));
+    if (filtered.length > 0 && val) {
+      filtered.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'autocomplete-list-item';
+        div.textContent = item;
+        div.onclick = () => {
+          input.value = item;
+          lumenRxRows[index].ilac = item;
+          acList.style.display = 'none';
+        };
+        acList.appendChild(div);
+      });
+    }
+  }
+  
+  document.addEventListener('click', (e) => {
+    if (!e.target.matches('#lumenRxDrugs input') && !e.target.matches('.autocomplete-list-item')) {
+      document.querySelectorAll('.autocomplete-list').forEach(list => list.style.display = 'none');
+    }
+  });
+  
+  function addLumenRxRow() {
+    lumenRxRows.push({ilac:'',doza:'',dtd:'',shenime:''});
+    renderLumenRxRows();
+  }
+  
+  function calcLumenRxMosha() {
+    const f = document.forms.lumenRxForm;
+    if(f) f.mosha.value = llogariteMosha(f.datelindja.value);
+  }
+  
+  function saveLumenRx() {
+    const f = document.forms.lumenRxForm;
+    if (!f) return;
+    
+    const data = { 
+      ilace: lumenRxRows,
+      date: new Date().toISOString()
+    };
+    
+    f.querySelectorAll('[name]').forEach(el => data[el.name] = el.value);
+    
+    // Ruaj në historik
+    const savedHistory = JSON.parse(localStorage.getItem('dlumen_lumenrx_history')) || [];
+    savedHistory.push(data);
+    localStorage.setItem('dlumen_lumenrx_history', JSON.stringify(savedHistory));
+    
+    // Ruaj si recetë aktuale
+    localStorage.setItem('dlumen_lumenrx', JSON.stringify(data));
+    
+    document.getElementById('lumenRxResult').innerHTML = "<span style='color:#aaff00;'>Receta u ruajt me sukses!</span>";
+    setTimeout(() => document.getElementById('lumenRxResult').innerHTML = "", 3000);
+  }
+  
+  function loadLumenRx() {
+    calcLumenRxMosha();
+    const savedData = JSON.parse(localStorage.getItem('dlumen_lumenrx'));
+    if (savedData) {
+        const f = document.forms.lumenRxForm;
+        f.querySelectorAll('[name]').forEach(el => {
+            if (savedData[el.name]) el.value = savedData[el.name];
+        });
+        lumenRxRows = savedData.ilace || [];
+        calcLumenRxMosha();
+    }
+    renderLumenRxRows();
+  }
+  
+  function printLumenRx() {
+    const f = document.forms.lumenRxForm;
+    let html = `<div style="font-family:'Poppins',sans-serif;max-width:700px;margin:auto;padding:20px;">
+      <h2 style="text-align:center;color:#16fff3;border-bottom:1px solid #16fff3;padding-bottom:10px;">Recetë Elektronike</h2>
+      <p><b>Pacienti:</b> ${f.emri.value} ${f.mbiemri.value} &nbsp; <b>Mosha:</b> ${f.mosha.value}</p>
+      <p><b>Nr. Regjistrit:</b> ${f.regjistri.value} &nbsp; <b>Diagnoza:</b> ${f.diagnoza.value}</p>
+      <p style="margin-top:20px;"><b>Rp:</b></p>
+      <table border="1" style="width:100%;border-collapse:collapse;text-align:left;">
+        <tr style="background:#16fff311;color:#16fff3;"><th>Medikamenti</th><th>Doza</th><th>D.t.d</th><th>Shënime</th></tr>
+        ${lumenRxRows.map(r=>`<tr><td style="padding:8px;">${r.ilac||''}</td><td style="padding:8px;">${r.doza||''}</td><td style="padding:8px;">${r.dtd||''}</td><td style="padding:8px;">${r.shenime||''}</td></tr>`).join('')}
+      </table>
+ <div style="display:flex;justify-content:space-between;margin-top:50px;padding-top:20px;border-top:1px solid #16fff388;">
+        <span><b>Mjeku: Dr. Erio</b></span>
+        <span><b>Data:</b> ${(new Date()).toLocaleDateString()}</span>
+      </div>
+    </div>`;
+    
+    let win = window.open('', '', 'width=900,height=700');
+    win.document.write('<html><head><title>Recetë Elektronike</title></head><body style="background-color:#17212e; color:#e8fdff;">'+html+'</body></html>');
+    win.document.close();
+    win.print();
+  }
+  
+  function shareLumenRxPDF() { 
+    alert('Opsioni share PDF do të implementohet në versionin e ardhshëm.'); 
+  }
+  
+  function showLumenRxHistory() {
+    const historyDiv = document.getElementById('lumenRxHistory');
+    const savedHistory = JSON.parse(localStorage.getItem('dlumen_lumenrx_history')) || [];
+    
+    if (savedHistory.length === 0) {
+      historyDiv.innerHTML = '<p style="color:#92e7ff;text-align:center;">Nuk ka receta të ruajtura në historik.</p>';
+      historyDiv.style.display = 'block';
+      return;
+    }
+    
+    let html = '<h3 style="color:#16fff3;border-bottom:1px solid #16fff3;padding-bottom:5px;">Historiku i Recetave</h3>';
+    html += '<div style="max-height:300px;overflow-y:auto;">';
+    
+    savedHistory.reverse().forEach((receta, index) => {
+      html += `<div style="background:rgba(20,33,54,0.7);border-radius:10px;padding:15px;margin-bottom:15px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+          <span style="color:#16fff3;font-weight:600;">Receta ${savedHistory.length - index}</span>
+          <span style="color:#92e7ff;">${new Date(receta.date).toLocaleDateString()}</span>
+        </div>
+        <p><b>Pacienti:</b> ${receta.emri} ${receta.mbiemri} (${receta.mosha})</p>
+        <p><b>Diagnoza:</b> ${receta.diagnoza}</p>
+        <button class="btn" onclick="loadLumenRxFromHistory(${savedHistory.length - index - 1})" style="padding:5px 10px;font-size:0.8rem;margin-top:8px;">
+          Shiko detajet
+        </button>
+      </div>`;
+    });
+    
+    html += '</div>';
+    historyDiv.innerHTML = html;
+    historyDiv.style.display = 'block';
+  }
+  
+  function loadLumenRxFromHistory(index) {
+    const savedHistory = JSON.parse(localStorage.getItem('dlumen_lumenrx_history')) || [];
+    if (index >= 0 && index < savedHistory.length) {
+      const receta = savedHistory[index];
+      const f = document.forms.lumenRxForm;
+      
+      f.emri.value = receta.emri || '';
+      f.mbiemri.value = receta.mbiemri || '';
+      f.datelindja.value = receta.datelindja || '';
+      f.regjistri.value = receta.regjistri || '';
+      f.diagnoza.value = receta.diagnoza || '';
+      
+      lumenRxRows = receta.ilace || [];
+      renderLumenRxRows();
+      calcLumenRxMosha();
+      
+      document.getElementById('lumenRxHistory').style.display = 'none';
+      document.getElementById('lumenRxResult').innerHTML = "<span style='color:#aaff00;'>Receta u ngarkua nga historiku!</span>";
+      setTimeout(() => document.getElementById('lumenRxResult').innerHTML = "", 3000);
+    }
+  }
+
+  // Funksionet për axhendën
+  function ruajTakimet(arr) { localStorage.setItem('axhendaLumen', JSON.stringify(arr)); }
+  function merrTakimet() { return JSON.parse(localStorage.getItem('axhendaLumen')) || []; }
+  
+  function gjeneroNgjyreLloji(lloji) {
+    if(lloji=="Fizike") return "#16fff333";
+    if(lloji=="Online") return "#ffe68633";
+    if(lloji=="Telefon") return "#38ffb333";
+    return "#ccc333";
+  }
+  
+  function shtoTakim() {
+    const f = document.forms.formAxhenda;
+    const arr = merrTakimet();
+    
+    arr.push({
+      id: Date.now(), 
+      data: f.data.value, 
+      ora: f.ora.value, 
+      lloji: f.lloji.value,
+      pacienti: f.pacienti.value, 
+      arsyeja: f.arsyeja.value, 
+      status: "Planifikuar",
+      dateAdded: new Date().toISOString()
+    });
+    
+    ruajTakimet(arr); 
+    f.reset(); 
+    renderAxhenda();
+  }
+  
+  function ndryshoStatusTakim(id, status) {
+    const arr = merrTakimet();
+    const i = arr.findIndex(x=>x.id==id);
+    if(i>-1) arr[i].status = status;
+    ruajTakimet(arr); 
+    renderAxhenda();
+  }
+  
+  function fshiTakim(id) {
+    if(confirm('Jeni i sigurt që dëshironi të fshini këtë takim?')) {
+      ruajTakimet(merrTakimet().filter(x=>x.id!=id));
+      renderAxhenda();
+    }
+  }
+  
+  function renderAxhenda() {
+    const el = document.getElementById("tabelAxhenda");
+    if(!el) return;
+    
+    const filter = document.getElementById("filterAxhenda").value;
+    const arr = merrTakimet();
+    
+    // Filtro takimet sipas zgjedhjes
+    let filteredArr = arr;
+    const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+    const endOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 6));
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    
+    if (filter === "today") {
+      filteredArr = arr.filter(t => t.data === today);
+    } else if (filter === "week") {
+      filteredArr = arr.filter(t => {
+        const takimDate = new Date(t.data);
+        return takimDate >= startOfWeek && takimDate <= endOfWeek;
+      });
+    } else if (filter === "month") {
+      filteredArr = arr.filter(t => {
+        const takimDate = new Date(t.data);
+        return takimDate >= startOfMonth && takimDate <= endOfMonth;
+      });
+    } else if (filter !== "all") {
+      filteredArr = arr.filter(t => t.status === filter);
+    }
+    
+    if(!filteredArr.length) {
+      el.innerHTML = `<div style="color:#47f7fe;font-size:1.1rem;padding:20px 0; text-align:center;">Nuk ka takime që përputhen me filtrin.</div>`;
+      return;
+    }
+    
+    // Rendit takimet sipas datës dhe orës
+    filteredArr.sort((a,b)=>a.data.localeCompare(b.data)||a.ora.localeCompare(b.ora));
+    
+    let html = `<div class="scroll-x"><table style="width:100%;border-collapse:collapse;text-align:left;">
+      <tr style="color:#16fff3;">
+        <th>Data</th>
+        <th>Ora</th>
+        <th>Lloji</th>
+        <th>Pacienti</th>
+        <th>Arsyeja</th>
+        <th>Statusi</th>
+        <th></th>
+      </tr>`;
+    
+    for(let t of filteredArr) {
+      html += `<tr style="background:${gjeneroNgjyreLloji(t.lloji)};">
+        <td>${t.data}</td>
+        <td>${t.ora}</td>
+        <td>${t.lloji}</td>
+        <td>${t.pacienti}</td>
+        <td>${t.arsyeja}</td>
+        <td>
+          <select onchange="ndryshoStatusTakim(${t.id},this.value)" style="background:#0a121a;border-color:#16fff388;">
+            <option${t.status=="Planifikuar"?" selected":""}>Planifikuar</option>
+            <option${t.status=="Përfunduar"?" selected":""}>Përfunduar</option>
+            <option${t.status=="Anuluar"?" selected":""}>Anuluar</option>
+          </select>
+        </td>
+        <td>
+          <button onclick="fshiTakim(${t.id})" title="Fshi" style="background:transparent;border:none;cursor:pointer;color:#e45b8c;font-size:1.1rem;">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>`;
+    }
+    
+    html += `</table></div>`;
+    el.innerHTML = html;
+  }
+
+  // Funksionet për pacientët
+  function loadPacientet() {
+    const savedKartela = JSON.parse(localStorage.getItem('dlumen_kartela')) || {};
+    const savedHistory = JSON.parse(localStorage.getItem('dlumen_lumenrx_history')) || [];
+    
+    // Krijo një listë të pacientëve bazuar në historikun e recetave
+    const pacientetList = document.getElementById('pacientetList');
+    pacientetList.innerHTML = '';
+    
+    if (savedHistory.length === 0) {
+      pacientetList.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#92e7ff;">Nuk ka pacientë të regjistruar.</td></tr>';
+      return;
+    }
+    
+    // Grupo recetat sipas pacientëve
+    const pacientetMap = {};
+    savedHistory.forEach(receta => {
+      const key = `${receta.emri}_${receta.mbiemri}`;
+      if (!pacientetMap[key]) {
+        pacientetMap[key] = {
+          emri: receta.emri,
+          mbiemri: receta.mbiemri,
+          mosha: receta.mosha,
+          diagnoza: receta.diagnoza,
+          vizitaFundit: receta.date,
+          count: 1
+        };
+      } else {
+        if (new Date(receta.date) > new Date(pacientetMap[key].vizitaFundit)) {
+          pacientetMap[key].vizitaFundit = receta.date;
+          pacientetMap[key].diagnoza = receta.diagnoza;
+        }
+        pacientetMap[key].count++;
+      }
+    });
+    
+    // Rendit pacientët sipas vizitës së fundit
+    const sortedPacientet = Object.values(pacientetMap).sort((a,b) => 
+      new Date(b.vizitaFundit) - new Date(a.vizitaFundit)
+    );
+    
+    // Shfaq pacientët në tabelë
+    sortedPacientet.forEach(pacient => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${pacient.emri}</td>
+        <td>${pacient.mbiemri}</td>
+        <td>${pacient.mosha}</td>
+        <td>${pacient.diagnoza || '-'}</td>
+        <td>${new Date(pacient.vizitaFundit).toLocaleDateString()}</td>
+        <td>
+          <button onclick="shikoKartelen('${pacient.emri}', '${pacient.mbiemri}')" style="background:transparent;border:none;cursor:pointer;color:#16fff3;font-size:1.1rem;margin-right:5px;" title="Shiko kartelën">
+            <i class="fas fa-file-medical"></i>
+          </button>
+          <button onclick="krijoRecetePacientit('${pacient.emri}', '${pacient.mbiemri}')" style="background:transparent;border:none;cursor:pointer;color:#aaff00;font-size:1.1rem;" title="Krijo recetë">
+            <i class="fas fa-prescription"></i>
+          </button>
+        </td>
+      `;
+      pacientetList.appendChild(row);
+    });
+  }
+  
+  function filterPacientet() {
+    const searchTerm = document.getElementById('searchPacientet').value.toLowerCase();
+    const rows = document.getElementById('pacientetList').querySelectorAll('tr');
+    
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      if (text.includes(searchTerm)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+  
+  function shikoKartelen(emri, mbiemri) {
+    loadPanel('kartela');
+    const f = document.forms.kartelaForm;
+    if (f) {
+      f.emri.value = emri;
+      f.mbiemri.value = mbiemri;
+    }
+  }
+  
+  function krijoRecetePacientit(emri, mbiemri) {
+    loadPanel('lumenrx');
+    const f = document.forms.lumenRxForm;
+    if (f) {
+      f.emri.value = emri;
+      f.mbiemri.value = mbiemri;
+    }
+  }
+
+  // Funksionet për animacionin e pjesëve në sfond
+  const canvas = document.getElementById('particles-bg');
+  const ctx = canvas.getContext('2d');
+  let w = window.innerWidth, h = window.innerHeight;
+  canvas.width = w; canvas.height = h;
+  
+  function resize() { w=window.innerWidth; h=window.innerHeight; canvas.width=w; canvas.height=h;}
+  window.addEventListener('resize', resize);
+  
+  let particles = [];
+  for(let i=0;i<45;i++){
+    particles.push({
+      x:Math.random()*w, y:Math.random()*h, r:Math.random()*1.7+1.2,
+      dx:Math.random()*0.7-0.35, dy:Math.random()*0.4-0.2, a:Math.random()*2*Math.PI
+    });
+  }
+  
+  function drawParticles() {
+    if(!ctx) return;
+    ctx.clearRect(0,0,w,h);
+    
+    for(let p of particles){
+      ctx.save();
+      ctx.globalAlpha = 0.15+Math.abs(Math.sin(p.a))*0.25;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,2*Math.PI);
+      ctx.fillStyle="#16fff3";
+      ctx.shadowColor="#16fff3"; ctx.shadowBlur=16; ctx.fill();
+      ctx.restore();
+      
+      p.x+=p.dx; p.y+=p.dy; p.a+=0.02+Math.random()*0.01;
+      if(p.x<0)p.x=w; if(p.x>w)p.x=0; if(p.y<0)p.y=h; if(p.y>h)p.y=0;
+    }
+    requestAnimationFrame(drawParticles);
+  }
+  
+  drawParticles();
+
+  // Inicializimi i aplikacionit
+  renderMenu();
+  loadPanel(isLoggedIn() ? "lumenrx" : "shtepia");
+</script>
 </body>
 </html>
